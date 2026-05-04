@@ -58,3 +58,28 @@ export const startProcessInstance = async (accessToken) => {
 
   return await response.json();
 };
+
+export const getFormSchema = async (accessToken, formKey) => {
+  const url = `https://bank-enc-dec-kotakfiplatform.bharatkioskbanking.com/kotak/los/camunda/getFormSchema/${formKey}`;
+  
+  const headers = {
+    'Authorization': accessToken,
+    'Content-Type': 'application/json'
+  };
+
+  console.log(`Calling getFormSchema for key: ${formKey}`);
+  
+  const response = await fetch(url, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({})
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error(`getFormSchema failed with status ${response.status}:`, errorText);
+    throw new Error(`Server returned ${response.status} for form schema request.`);
+  }
+
+  return await response.json();
+};

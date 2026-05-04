@@ -236,3 +236,18 @@
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+.back-btn {
+  background: none;
+  border: none;
+  color: #003366;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.back-btn:hover {
+  text-decoration: underline;
+}
