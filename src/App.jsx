@@ -81,17 +81,20 @@ function App() {
     try {
       console.log(`Submitting form for task: ${currentTask.name}`);
       
-      // Prepare the request body based on the task name using our configuration store
-      const finalPayload = preparePayload(currentTask.name, formData);
-      
-      // Store in history for local reference
+      // The formData already contains the correct hierarchy (paths/groups) 
+      // as defined in the Camunda schema. We merge it directly.
+      const updatedVariables = {
+        ...processVariables,
+        ...formData
+      };
+      setProcessVariables(updatedVariables);
       setFormHistory(prev => ({
         ...prev,
-        [currentTask.name]: finalPayload
+        [currentTask.name]: updatedVariables
       }));
 
-      // Complete current task with the prepared payload
-      const completeResponse = await completeTask(token, currentTask.userTaskKey, finalPayload);
+      // Complete current task with the cumulative, structured data
+      const completeResponse = await completeTask(token, currentTask.userTaskKey, updatedVariables);
       console.log('Complete Task Response:', completeResponse);
 
       // Check for next task in the response

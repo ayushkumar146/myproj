@@ -3,8 +3,8 @@
  */
 
 export const taskRequestBodies = {
-  // Currently, all forms use a default structure. 
-  // You can add specific task names here later if they need unique fields.
+  // Currently, the request body is generated dynamically based on the form's paths/groups.
+  // You can define default values here for specific tasks if needed.
   "default": {
     "go_next": true
   }
@@ -12,19 +12,19 @@ export const taskRequestBodies = {
 
 /**
  * Helper to get a prepared request body merged with submitted data.
- * Even if a task name is not explicitly defined, it will always include "go_next": true.
+ * The formData now includes the native pathing (e.g. { "validate": { "name": "..." } })
+ * as defined in the Camunda schema.
  * 
  * @param {string} taskName 
  * @param {object} formData 
  * @returns {object}
  */
 export const preparePayload = (taskName, formData) => {
-  // Use specific task body if it exists, otherwise use empty object
   const baseBody = taskRequestBodies[taskName] || {};
   
   return {
     ...baseBody,
     ...formData,
-    "go_next": true // Ensured by default for every form as requested
+    "go_next": true
   };
 };
