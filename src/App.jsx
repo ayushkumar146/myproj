@@ -1,122 +1,86 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import React, { useState } from 'react';
+import './styles/Dashboard.css';
+import { login, startProcessInstance } from './services/api';
+
+// Components
+import StatCard from './components/Dashboard/StatCard';
+import ProductButton from './components/Dashboard/ProductButton';
+import DashboardListItem from './components/Dashboard/DashboardListItem';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+
+  const handleFISA_Click = async () => {
+    setLoading(true);
+    setMessage('');
+    try {
+      console.log('Logging in...');
+      const loginResponse = await login();
+      const accessToken = loginResponse.access_token;
+      
+      console.log('Starting process instance...');
+      const processResponse = await startProcessInstance(accessToken);
+      
+      console.log('Success:', processResponse);
+      setMessage(`Success: Process ID ${processResponse.items?.processId}`);
+      alert(`Success! Process ID: ${processResponse.items?.processId}`);
+    } catch (error) {
+      console.error('Error:', error);
+      setMessage(`Error: ${error.message}`);
+      alert(`Error: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="container">
+      {loading && (
+        <div className="loading-overlay">
+          <div className="spinner"></div>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+      )}
+      
+      <div className="dashboard">
+        <header className="dashboard-header">
+          <h1 className="header">SA Opening Dashboard</h1>
+        </header>
 
-      <div className="ticks"></div>
+        <main className="dashboard-content">
+          <section className="stats-grid">
+            <StatCard label="Submitted Leads" value="600" />
+            <StatCard label="Rejection Leads" value="124" />
+            <StatCard label="WIP Pending Leads" value="267" fullWidth />
+          </section>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+          <section className="section">
+            <h2 className="section-title">All Products</h2>
+            <div className="products-grid">
+              <ProductButton label="FI_SA" onClick={handleFISA_Click} />
+            </div>
+          </section>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+          <section className="section">
+            <h2 className="section-title">Dashboard</h2>
+            <div className="list-container">
+              <DashboardListItem label="Submitted Leads" />
+              <DashboardListItem label="WIP Pending Leads" />
+              <DashboardListItem label="Rejection Leads" />
+            </div>
+          </section>
+        </main>
+
+        {message && (
+          <footer className="dashboard-footer">
+            <div className={`message-banner ${message.startsWith('Error') ? 'error' : 'success'}`}>
+              {message}
+            </div>
+          </footer>
+        )}
+      </div>
+    </div>
+  );
 }
 
-export default App
+export default App;
