@@ -83,3 +83,35 @@ export const getFormSchema = async (accessToken, formKey) => {
 
   return await response.json();
 };
+
+export const completeTask = async (accessToken, userTaskKey, variables = {}) => {
+  const url = `https://bank-enc-dec-kotakfiplatform.bharatkioskbanking.com/kotak/los/camunda/completeTask/${userTaskKey}`;
+  
+  const headers = {
+    'Authorization': accessToken,
+    'Content-Type': 'application/json'
+  };
+
+  const body = {
+    processVariables: {
+      ...variables,
+      "go_next": true
+    }
+  };
+
+  console.log(`Completing task ${userTaskKey} with variables:`, body);
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(body)
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error(`completeTask failed with status ${response.status}:`, errorText);
+    throw new Error(`Server returned ${response.status} for completeTask.`);
+  }
+
+  return await response.json();
+};

@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './styles/Dashboard.css';
 import './styles/DynamicForm.css';
-import { login, startProcessInstance, getFormSchema } from './services/api';
+import { login, startProcessInstance, getFormSchema, completeTask } from './services/api';
+import { preparePayload } from './services/RequestBodies';
 
 // Components
 import StatCard from './components/Dashboard/StatCard';
@@ -19,14 +20,37 @@ function App() {
   const [token, setToken] = useState('');
   const [message, setMessage] = useState('');
 
-  // Auto-login check (optional, keeping it simple for now)
-  useEffect(() => {
-    // Initial load logic if any
-  }, []);
+  // Track current task state
+  const [currentTask, setCurrentTask] = useState({
+    userTaskKey: null,
+    name: ''
+  });
+
+  const [formHistory, setFormHistory] = useState({});
 
   const handleLoginSuccess = (response) => {
     setToken(response.access_token);
     setIsAuthenticated(true);
+  };
+
+  // Helper to fetch schema and update view
+  const loadTaskForm = async (authToken, taskKey, taskName) => {
+    setLoading(true);
+    try {
+      console.log(`Loading form for task: ${taskName} (${taskKey})`);
+      const schema = await getFormSchema(authToken, taskKey);
+
+      setFormSchema({ ...schema, taskName });
+      setProcessVariables(schema.processVariables || {});
+      setCurrentTask({ userTaskKey: taskKey, name: taskName });
+      setView('form');
+      setMessage('');
+    } catch (error) {
+      console.error('Failed to load form:', error);
+      setMessage(`Error loading form: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleFISA_Click = async () => {
@@ -36,41 +60,60 @@ function App() {
       console.log('Starting process instance...');
       const processResponse = await startProcessInstance(token);
       console.log('Process Response:', processResponse);
-      
+
       const userTask = processResponse.items?.userTasks?.[0];
-      const formKey = userTask?.formKey;
-      const userTaskKey = userTask?.userTaskKey;
-      const taskName = userTask?.name;
-      
-      console.log('Task Name:', taskName);
-      console.log('User Task Key:', userTaskKey);
-      console.log('Form Key:', formKey);
-
-      // User explicitly stated to use the userTaskKey
-      const targetKey = userTaskKey || formKey;
-
-      if (targetKey) {
-        console.log(`Fetching form schema using userTaskKey: ${targetKey}...`);
-        const schema = await getFormSchema(token, targetKey);
-        setFormSchema({ ...schema, taskName }); // Include name in schema object
-        setProcessVariables(schema.processVariables || {});
-        setView('form');
+      if (userTask) {
+        await loadTaskForm(token, userTask.userTaskKey, userTask.name);
       } else {
-        setMessage('Process started, but no valid key (formKey or userTaskKey) was found.');
+        setMessage('Process started, but no initial user task was found.');
       }
     } catch (error) {
-      console.error('Error in flow:', error);
+      console.error('Error starting process:', error);
       setMessage(`Error: ${error.message}`);
-      alert(`Error: ${error.message}`);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleFormSubmit = useCallback((formData) => {
-    console.log('Form Submitted Data:', formData);
-    alert('Form submitted successfully! Check console for details.');
-  }, []);
+  const handleFormSubmit = useCallback(async (formData) => {
+    setLoading(true);
+    setMessage('');
+    try {
+      console.log(`Submitting form for task: ${currentTask.name}`);
+      
+      // Prepare the request body based on the task name using our configuration store
+      const finalPayload = preparePayload(currentTask.name, formData);
+      
+      // Store in history for local reference
+      setFormHistory(prev => ({
+        ...prev,
+        [currentTask.name]: finalPayload
+      }));
+
+      // Complete current task with the prepared payload
+      const completeResponse = await completeTask(token, currentTask.userTaskKey, finalPayload);
+      console.log('Complete Task Response:', completeResponse);
+
+      // Check for next task in the response
+      const nextTask = completeResponse.items?.userTasks?.[0];
+      if (nextTask) {
+        console.log('Moving to next task:', nextTask.name);
+        await loadTaskForm(token, nextTask.userTaskKey, nextTask.name);
+      } else {
+        console.log('No more tasks, process completed or in background.');
+        setMessage('Task completed successfully. Returning to dashboard...');
+        setTimeout(() => {
+          setView('dashboard');
+          setFormSchema(null);
+        }, 2000);
+      }
+    } catch (error) {
+      console.error('Error completing task:', error);
+      setMessage(`Error: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  }, [token, currentTask, loadTaskForm]);
 
   const renderDashboard = () => (
     <div className="dashboard">
@@ -104,7 +147,7 @@ function App() {
 
       {message && (
         <footer className="dashboard-footer">
-          <div className={`message-banner ${message.startsWith('Error') ? 'error' : 'success'}`}>
+          <div className={`message-banner ${message.toLowerCase().includes('error') ? 'error' : 'success'}`}>
             {message}
           </div>
         </footer>
@@ -132,17 +175,21 @@ function App() {
           <div className="spinner"></div>
         </div>
       )}
-      
+
       {view === 'dashboard' ? (
         renderDashboard()
       ) : (
         <div className="form-view">
-          <button className="back-btn" onClick={() => setView('dashboard')}>← Back to Dashboard</button>
-          <DynamicForm 
-            schema={formSchema} 
-            processVariables={processVariables} 
+          <div className="form-header-bar">
+            <button className="back-btn" onClick={() => setView('dashboard')}>← Back</button>
+            <span className="task-status">Current Task: {currentTask.name.toUpperCase()}</span>
+          </div>
+          <DynamicForm
+            schema={formSchema}
+            processVariables={processVariables}
             onFormSubmit={handleFormSubmit}
           />
+          {message && <div className="form-message">{message}</div>}
         </div>
       )}
     </div>
