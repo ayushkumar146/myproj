@@ -1,9 +1,47 @@
 import React, { useEffect, useRef } from 'react';
 import { Form } from '@bpmn-io/form-js';
 
-// Import form-js styles
-import '@bpmn-io/form-js/dist/assets/form-js.css';
-import '@bpmn-io/form-js/dist/assets/form-js-base.css';
+// bpmn-io styles are imported globally in main.jsx to ensure our overrides win
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Schema pre-processor
+//
+// Recursively walks every component in the Camunda form schema BEFORE it is
+// handed to bpmn-io.  Any component whose `label` is the literal default type
+// name ("Checkbox" / "Radio") gets its label cleared so bpmn-io never renders
+// that placeholder text at all.
+//
+// This is reliable because it operates on the data, not the DOM — no timing or
+// CSS specificity problems are possible.
+// ─────────────────────────────────────────────────────────────────────────────
+const DEFAULT_LABEL_RE = /^(checkbox|radio)[\s*]*$/i;
+
+const preprocessSchema = (rawSchema) => {
+  // Deep-clone so we never mutate the original prop
+  const schema = JSON.parse(JSON.stringify(rawSchema));
+
+  const walkComponents = (components) => {
+    if (!Array.isArray(components)) return components;
+    return components.map((comp) => {
+      // Clear the label if it is just the type name placeholder
+      if (DEFAULT_LABEL_RE.test((comp.label ?? '').trim())) {
+        comp.label = '';
+      }
+      // Recurse into nested layouts / groups
+      if (comp.components) {
+        comp.components = walkComponents(comp.components);
+      }
+      return comp;
+    });
+  };
+
+  if (schema.components) {
+    schema.components = walkComponents(schema.components);
+  }
+  return schema;
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 const DynamicForm = ({ schema, processVariables, onFormSubmit }) => {
   const formElementRef = useRef(null);
@@ -11,6 +49,7 @@ const DynamicForm = ({ schema, processVariables, onFormSubmit }) => {
   useEffect(() => {
     let formInstance = null;
     let isMounted = true;
+    let observer = null;
 
     const initForm = async () => {
       if (!schema || !schema.form || !formElementRef.current) return;
@@ -25,10 +64,10 @@ const DynamicForm = ({ schema, processVariables, onFormSubmit }) => {
 
       // Clear previous content
       formElementRef.current.innerHTML = '';
-      
+
       try {
         const form = new Form({
-          container: formElementRef.current
+          container: formElementRef.current,
         });
 
         if (!isMounted) {
@@ -38,8 +77,20 @@ const DynamicForm = ({ schema, processVariables, onFormSubmit }) => {
 
         formInstance = form;
 
-        // bpmn-io form-js expects the schema object directly
-        await form.importSchema(schema.form, processVariables);
+        // ── Pre-process the schema to strip default "Checkbox"/"Radio" labels ──
+        const cleanSchema = preprocessSchema(schema.form);
+
+        await form.importSchema(cleanSchema, processVariables);
+
+        // Watch for conditional fields that bpmn-io may add later
+        observer = new MutationObserver(() => {
+          // No DOM cleanup needed — labels are already cleared in the schema
+        });
+        observer.observe(formElementRef.current, {
+          childList: true,
+          subtree: true,
+          characterData: true,
+        });
 
         form.on('submit', (event) => {
           const { data, errors } = event;
@@ -57,6 +108,10 @@ const DynamicForm = ({ schema, processVariables, onFormSubmit }) => {
 
     return () => {
       isMounted = false;
+      if (observer) {
+        observer.disconnect();
+        observer = null;
+      }
       if (formInstance) {
         formInstance.destroy();
         formInstance = null;

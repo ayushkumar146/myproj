@@ -40,7 +40,38 @@ function App() {
       console.log(`Loading form for task: ${taskName} (${taskKey})`);
       const schema = await getFormSchema(authToken, taskKey);
 
-      setFormSchema({ ...schema, taskName });
+      // ── Sanitize schema BEFORE storing in state ──────────────────────────
+      // Recursively walk every component and clear any label/description/text
+      // that is literally "Checkbox" or "Radio" (bpmn-io default placeholders).
+      // This runs on the raw API data so bpmn-io never sees those strings.
+      const JUNK_LABEL = /^(checkbox|radio)\s*\*?\s*$/i;
+
+      const sanitizeComponents = (components) => {
+        if (!Array.isArray(components)) return components;
+        return components.map((comp) => {
+          const cleaned = { ...comp };
+          if (JUNK_LABEL.test((cleaned.label ?? '').trim()))       cleaned.label       = '';
+          if (JUNK_LABEL.test((cleaned.description ?? '').trim())) cleaned.description = '';
+          if (JUNK_LABEL.test((cleaned.text ?? '').trim()))        cleaned.text        = '';
+          // Recurse into nested layouts / groups / columns
+          if (cleaned.components) cleaned.components = sanitizeComponents(cleaned.components);
+          if (cleaned.columns)    cleaned.columns    = sanitizeComponents(cleaned.columns);
+          if (cleaned.rows)       cleaned.rows       = sanitizeComponents(cleaned.rows);
+          return cleaned;
+        });
+      };
+
+      const sanitizedForm = schema.form
+        ? {
+            ...schema.form,
+            components: sanitizeComponents(schema.form.components),
+          }
+        : schema.form;
+
+      const sanitizedSchema = { ...schema, form: sanitizedForm };
+      // ─────────────────────────────────────────────────────────────────────
+
+      setFormSchema({ ...sanitizedSchema, taskName });
       setProcessVariables(schema.processVariables || {});
       setCurrentTask({ userTaskKey: taskKey, name: taskName });
       setView('form');
@@ -52,6 +83,7 @@ function App() {
       setLoading(false);
     }
   };
+
 
   const handleFISA_Click = async () => {
     setLoading(true);
@@ -80,7 +112,7 @@ function App() {
     setMessage('');
     try {
       console.log(`Submitting form for task: ${currentTask.name}`);
-      
+
       // The formData already contains the correct hierarchy (paths/groups) 
       // as defined in the Camunda schema. We merge it directly.
       const updatedVariables = {
@@ -183,15 +215,22 @@ function App() {
         renderDashboard()
       ) : (
         <div className="form-view">
-          <div className="form-header-bar">
-            <button className="back-btn" onClick={() => setView('dashboard')}>← Back</button>
-            <span className="task-status">Current Task: {currentTask.name.toUpperCase()}</span>
+          <div className="form-page-header">
+            <button className="form-back-btn" onClick={() => setView('dashboard')}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19 12H5" stroke="#003366" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M12 19L5 12L12 5" stroke="#003366" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
           </div>
-          <DynamicForm
-            schema={formSchema}
-            processVariables={processVariables}
-            onFormSubmit={handleFormSubmit}
-          />
+
+          <div className="form-content-area">
+            <DynamicForm
+              schema={formSchema}
+              processVariables={processVariables}
+              onFormSubmit={handleFormSubmit}
+            />
+          </div>
           {message && <div className="form-message">{message}</div>}
         </div>
       )}
