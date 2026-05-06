@@ -9,6 +9,7 @@ import StatCard from './components/Dashboard/StatCard';
 import ProductButton from './components/Dashboard/ProductButton';
 import DashboardListItem from './components/Dashboard/DashboardListItem';
 import DynamicForm from './components/DynamicForm';
+import CaptureDocumentForm from './components/CaptureDocumentForm';
 import LoginPage from './components/LoginPage';
 
 function App() {
@@ -19,6 +20,17 @@ function App() {
   const [processVariables, setProcessVariables] = useState({});
   const [token, setToken] = useState('');
   const [message, setMessage] = useState('');
+
+  // Helper to determine if we should show the custom Capture Document form
+  const isCaptureDocumentForm = (schema) => {
+    if (!schema || !schema.form || !schema.form.components) return false;
+    
+    // Check top-level components and their immediate children for path: "captureDocument"
+    return schema.form.components.some(comp => 
+      comp.path === 'captureDocument' || 
+      (comp.components && comp.components.some(inner => inner.path === 'captureDocument'))
+    );
+  };
 
   // Track current task state
   const [currentTask, setCurrentTask] = useState({
@@ -148,7 +160,7 @@ function App() {
     } finally {
       setLoading(false);
     }
-  }, [token, currentTask, loadTaskForm]);
+  }, [token, currentTask, loadTaskForm, processVariables]);
 
   const renderDashboard = () => (
     <div className="dashboard">
@@ -215,27 +227,39 @@ function App() {
         renderDashboard()
       ) : (
         <div className="form-view">
-          <div className="form-page-header">
-            <button className="form-back-btn" onClick={() => setView('dashboard')}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M19 12H5" stroke="#003366" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M12 19L5 12L12 5" stroke="#003366" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          </div>
-
-          <div className="form-content-area">
-            <DynamicForm
-              schema={formSchema}
+          {/* Conditional Rendering: Custom Capture Form vs Default Dynamic Form */}
+          {isCaptureDocumentForm(formSchema) ? (
+            <CaptureDocumentForm
               processVariables={processVariables}
               onFormSubmit={handleFormSubmit}
+              onBack={() => setView('dashboard')}
             />
-          </div>
+          ) : (
+            <>
+              <div className="form-page-header">
+                <button className="form-back-btn" onClick={() => setView('dashboard')}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19 12H5" stroke="#003366" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M12 19L5 12L12 5" stroke="#003366" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+              </div>
+
+              <div className="form-content-area">
+                <DynamicForm
+                  schema={formSchema}
+                  processVariables={processVariables}
+                  onFormSubmit={handleFormSubmit}
+                />
+              </div>
+            </>
+          )}
           {message && <div className="form-message">{message}</div>}
         </div>
       )}
     </div>
   );
 }
+
 
 export default App;
