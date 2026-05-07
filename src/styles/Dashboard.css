@@ -83,7 +83,7 @@
 }
 
 .section-title {
-  color: #0056b3;
+  color: hsla(212, 43%, 50%, 1);
   font-size: 0.9rem;
   font-weight: 600;
   margin-bottom: 16px;

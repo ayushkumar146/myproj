@@ -230,6 +230,7 @@ function App() {
           {/* Conditional Rendering: Custom Capture Form vs Default Dynamic Form */}
           {isCaptureDocumentForm(formSchema) ? (
             <CaptureDocumentForm
+              key={currentTask.userTaskKey}
               processVariables={processVariables}
               onFormSubmit={handleFormSubmit}
               onBack={() => setView('dashboard')}
@@ -247,6 +248,7 @@ function App() {
 
               <div className="form-content-area">
                 <DynamicForm
+                  key={currentTask.userTaskKey}
                   schema={formSchema}
                   processVariables={processVariables}
                   onFormSubmit={handleFormSubmit}
@@ -257,6 +259,7 @@ function App() {
           {message && <div className="form-message">{message}</div>}
         </div>
       )}
+
     </div>
   );
 }
