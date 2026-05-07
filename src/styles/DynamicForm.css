@@ -103,7 +103,8 @@
    Text inputs & textareas
    -------------------------------------------------------------------------- */
 .fjs-input,
-.fjs-textarea {
+.fjs-textarea,
+.fjs-select {
   background-color: #f8f9fb !important;
   border: 1.5px solid #d0d5dd !important;
   border-radius: 8px !important;
@@ -117,7 +118,8 @@
 }
 
 .fjs-input:focus,
-.fjs-textarea:focus {
+.fjs-textarea:focus,
+.fjs-select:focus {
   border-color: #003366 !important;
   background-color: #ffffff !important;
   box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.1) !important;
@@ -498,9 +500,28 @@
   background: #f8f9fb !important;
 }
 
-.fjs-form-field-date .fjs-input {
+.fjs-form-field-date .fjs-input,
+.fjs-form-field-select .fjs-select {
   border: none !important;
   background: transparent !important;
+}
+
+/* --------------------------------------------------------------------------
+   Select field container
+   -------------------------------------------------------------------------- */
+.fjs-form-field-select .fjs-input-group {
+  display: flex !important;
+  border: 1.5px solid #d0d5dd !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  background: #f8f9fb !important;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.fjs-form-field-select .fjs-input-group:focus-within {
+  border-color: #003366 !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.1) !important;
 }
 
 /* --------------------------------------------------------------------------
