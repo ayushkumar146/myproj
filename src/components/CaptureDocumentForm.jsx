@@ -23,9 +23,9 @@ const CaptureDocumentForm = ({ processVariables, onFormSubmit, onBack }) => {
         setActiveSlot(slotId);
         setIsCameraOpen(true);
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ 
-                video: { facingMode: 'environment' }, 
-                audio: false 
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: 'environment' },
+                audio: false
             });
             streamRef.current = stream;
             if (videoRef.current) {
@@ -54,7 +54,7 @@ const CaptureDocumentForm = ({ processVariables, onFormSubmit, onBack }) => {
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            
+
             const imageData = canvas.toDataURL('image/jpeg');
             setCaptures(prev => ({
                 ...prev,
@@ -108,8 +108,8 @@ const CaptureDocumentForm = ({ processVariables, onFormSubmit, onBack }) => {
                     {required && <span className="required">*</span>}
                     {optional && <span className="optional">(Optional)</span>}
                 </div>
-                <div 
-                    className={`capture-slot ${isCaptured ? 'captured' : ''}`} 
+                <div
+                    className={`capture-slot ${isCaptured ? 'captured' : ''}`}
                     onClick={() => openCamera(id)}
                 >
                     {isCaptured ? (
@@ -142,7 +142,7 @@ const CaptureDocumentForm = ({ processVariables, onFormSubmit, onBack }) => {
 
             <main className="capture-content">
                 <p className="product-instruction">Product Provide The Bellow Documents</p>
-                
+
                 <table className="info-table">
                     <tbody>
                         <tr className="info-row">

@@ -24,10 +24,10 @@ function App() {
   // Helper to determine if we should show the custom Capture Document form
   const isCaptureDocumentForm = (schema) => {
     if (!schema || !schema.form || !schema.form.components) return false;
-    
+
     // Check top-level components and their immediate children for path: "captureDocument"
-    return schema.form.components.some(comp => 
-      comp.path === 'captureDocument' || 
+    return schema.form.components.some(comp =>
+      comp.path === 'captureDocument' ||
       (comp.components && comp.components.some(inner => inner.path === 'captureDocument'))
     );
   };
@@ -51,10 +51,10 @@ function App() {
       console.error('[loadTaskForm] No taskKey provided');
       return;
     }
-    
+
     setLoading(true);
     // setFormSchema(null); // Optional: clear old schema to show loading/empty state
-    
+
     try {
       console.log(`[loadTaskForm] Fetching schema for task: ${taskName} (${taskKey})`);
       const schema = await getFormSchema(authToken, taskKey);
@@ -71,21 +71,21 @@ function App() {
         if (!Array.isArray(components)) return components;
         return components.map((comp) => {
           const cleaned = { ...comp };
-          if (JUNK_LABEL.test((cleaned.label ?? '').trim()))       cleaned.label       = '';
+          if (JUNK_LABEL.test((cleaned.label ?? '').trim())) cleaned.label = '';
           if (JUNK_LABEL.test((cleaned.description ?? '').trim())) cleaned.description = '';
-          if (JUNK_LABEL.test((cleaned.text ?? '').trim()))        cleaned.text        = '';
+          if (JUNK_LABEL.test((cleaned.text ?? '').trim())) cleaned.text = '';
           if (cleaned.components) cleaned.components = sanitizeComponents(cleaned.components);
-          if (cleaned.columns)    cleaned.columns    = sanitizeComponents(cleaned.columns);
-          if (cleaned.rows)       cleaned.rows       = sanitizeComponents(cleaned.rows);
+          if (cleaned.columns) cleaned.columns = sanitizeComponents(cleaned.columns);
+          if (cleaned.rows) cleaned.rows = sanitizeComponents(cleaned.rows);
           return cleaned;
         });
       };
 
       const sanitizedForm = schema.form
         ? {
-            ...schema.form,
-            components: sanitizeComponents(schema.form.components),
-          }
+          ...schema.form,
+          components: sanitizeComponents(schema.form.components),
+        }
         : schema.form;
 
       const sanitizedSchema = { ...schema, form: sanitizedForm };
@@ -138,21 +138,21 @@ function App() {
         ...processVariables,
         ...formData
       };
-      
+
       // Complete current task
       const completeResponse = await completeTask(token, currentTask.userTaskKey, updatedVariables);
       console.log('[handleFormSubmit] Complete Task Response:', completeResponse);
 
       // Check for next task in various possible response locations
-      const nextTask = 
-        completeResponse.items?.userTasks?.[0] || 
-        completeResponse.userTasks?.[0] || 
+      const nextTask =
+        completeResponse.items?.userTasks?.[0] ||
+        completeResponse.userTasks?.[0] ||
         completeResponse.data?.items?.userTasks?.[0] ||
         completeResponse.data?.userTasks?.[0];
-      
+
       if (nextTask) {
         console.log(`[handleFormSubmit] Found next task: ${nextTask.name} (${nextTask.userTaskKey}). Loading form...`);
-        
+
         // Update local variables before fetching next schema
         setProcessVariables(updatedVariables);
         setFormHistory(prev => ({
@@ -164,10 +164,10 @@ function App() {
         await loadTaskForm(token, nextTask.userTaskKey, nextTask.name);
       } else {
         console.log('[handleFormSubmit] No next task found in response. Returning to dashboard.');
-        
+
         // Even if no next task, we should keep the current data
         setProcessVariables(updatedVariables);
-        
+
         setMessage('Task completed successfully. No further tasks.');
         setTimeout(() => {
           setView('dashboard');
@@ -257,14 +257,14 @@ function App() {
             />
           ) : (
             <>
-              <div className="form-page-header">
+              {/* <div className="form-page-header">
                 <button className="form-back-btn" onClick={() => setView('dashboard')}>
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M19 12H5" stroke="#003366" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     <path d="M12 19L5 12L12 5" stroke="#003366" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </button>
-              </div>
+              </div> */}
 
               <div className="form-content-area">
                 <DynamicForm
