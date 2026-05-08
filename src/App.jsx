@@ -53,8 +53,9 @@ function App() {
     }
 
     setLoading(true);
-    // setFormSchema(null); // Optional: clear old schema to show loading/empty state
-
+    setFormSchema(null); // Clear old schema to force remount/cleanup
+    setCurrentTask({ userTaskKey: null, name: '' }); // Clear old task key to ensure components unmount
+    
     try {
       console.log(`[loadTaskForm] Fetching schema for task: ${taskName} (${taskKey})`);
       const schema = await getFormSchema(authToken, taskKey);
