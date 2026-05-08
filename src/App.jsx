@@ -46,16 +46,25 @@ function App() {
   };
 
   // Helper to fetch schema and update view
-  const loadTaskForm = async (authToken, taskKey, taskName) => {
+  const loadTaskForm = useCallback(async (authToken, taskKey, taskName) => {
+    if (!taskKey) {
+      console.error('[loadTaskForm] No taskKey provided');
+      return;
+    }
+    
     setLoading(true);
+    // setFormSchema(null); // Optional: clear old schema to show loading/empty state
+    
     try {
-      console.log(`Loading form for task: ${taskName} (${taskKey})`);
+      console.log(`[loadTaskForm] Fetching schema for task: ${taskName} (${taskKey})`);
       const schema = await getFormSchema(authToken, taskKey);
+      console.log(`[loadTaskForm] Schema response for ${taskName}:`, schema);
+
+      if (!schema || !schema.form) {
+        console.warn(`[loadTaskForm] Received invalid or empty schema for ${taskName}`);
+      }
 
       // ── Sanitize schema BEFORE storing in state ──────────────────────────
-      // Recursively walk every component and clear any label/description/text
-      // that is literally "Checkbox" or "Radio" (bpmn-io default placeholders).
-      // This runs on the raw API data so bpmn-io never sees those strings.
       const JUNK_LABEL = /^(checkbox|radio)\s*\*?\s*$/i;
 
       const sanitizeComponents = (components) => {
@@ -65,7 +74,6 @@ function App() {
           if (JUNK_LABEL.test((cleaned.label ?? '').trim()))       cleaned.label       = '';
           if (JUNK_LABEL.test((cleaned.description ?? '').trim())) cleaned.description = '';
           if (JUNK_LABEL.test((cleaned.text ?? '').trim()))        cleaned.text        = '';
-          // Recurse into nested layouts / groups / columns
           if (cleaned.components) cleaned.components = sanitizeComponents(cleaned.components);
           if (cleaned.columns)    cleaned.columns    = sanitizeComponents(cleaned.columns);
           if (cleaned.rows)       cleaned.rows       = sanitizeComponents(cleaned.rows);
@@ -83,18 +91,19 @@ function App() {
       const sanitizedSchema = { ...schema, form: sanitizedForm };
       // ─────────────────────────────────────────────────────────────────────
 
+      console.log(`[loadTaskForm] Updating state for task: ${taskName}`);
       setFormSchema({ ...sanitizedSchema, taskName });
       setProcessVariables(schema.processVariables || {});
       setCurrentTask({ userTaskKey: taskKey, name: taskName });
       setView('form');
       setMessage('');
     } catch (error) {
-      console.error('Failed to load form:', error);
+      console.error('[loadTaskForm] Failed to load form:', error);
       setMessage(`Error loading form: ${error.message}`);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
 
   const handleFISA_Click = async () => {
@@ -123,39 +132,50 @@ function App() {
     setLoading(true);
     setMessage('');
     try {
-      console.log(`Submitting form for task: ${currentTask.name}`);
+      console.log(`[handleFormSubmit] Submitting task: ${currentTask.name} (${currentTask.userTaskKey})`);
 
-      // The formData already contains the correct hierarchy (paths/groups) 
-      // as defined in the Camunda schema. We merge it directly.
       const updatedVariables = {
         ...processVariables,
         ...formData
       };
-      setProcessVariables(updatedVariables);
-      setFormHistory(prev => ({
-        ...prev,
-        [currentTask.name]: updatedVariables
-      }));
-
-      // Complete current task with the cumulative, structured data
+      
+      // Complete current task
       const completeResponse = await completeTask(token, currentTask.userTaskKey, updatedVariables);
-      console.log('Complete Task Response:', completeResponse);
+      console.log('[handleFormSubmit] Complete Task Response:', completeResponse);
 
-      // Check for next task in the response
-      const nextTask = completeResponse.items?.userTasks?.[0];
+      // Check for next task in various possible response locations
+      const nextTask = 
+        completeResponse.items?.userTasks?.[0] || 
+        completeResponse.userTasks?.[0] || 
+        completeResponse.data?.items?.userTasks?.[0] ||
+        completeResponse.data?.userTasks?.[0];
+      
       if (nextTask) {
-        console.log('Moving to next task:', nextTask.name);
+        console.log(`[handleFormSubmit] Found next task: ${nextTask.name} (${nextTask.userTaskKey}). Loading form...`);
+        
+        // Update local variables before fetching next schema
+        setProcessVariables(updatedVariables);
+        setFormHistory(prev => ({
+          ...prev,
+          [currentTask.name]: updatedVariables
+        }));
+
+        // Fetch schema and update view for next task
         await loadTaskForm(token, nextTask.userTaskKey, nextTask.name);
       } else {
-        console.log('No more tasks, process completed or in background.');
-        setMessage('Task completed successfully. Returning to dashboard...');
+        console.log('[handleFormSubmit] No next task found in response. Returning to dashboard.');
+        
+        // Even if no next task, we should keep the current data
+        setProcessVariables(updatedVariables);
+        
+        setMessage('Task completed successfully. No further tasks.');
         setTimeout(() => {
           setView('dashboard');
           setFormSchema(null);
         }, 2000);
       }
     } catch (error) {
-      console.error('Error completing task:', error);
+      console.error('[handleFormSubmit] Error during task completion:', error);
       setMessage(`Error: ${error.message}`);
     } finally {
       setLoading(false);
