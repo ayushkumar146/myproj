@@ -112,6 +112,19 @@ const ValidateSA = ({ onFormSubmit, processVariables }) => {
     onFormSubmit(payload);
   };
 
+  const isFormReady = 
+    formData.mobileNumberLinkedToAadhaar && patterns.mobileNumberLinkedToAadhaar.test(formData.mobileNumberLinkedToAadhaar) &&
+    formData.emailId && patterns.emailId.test(formData.emailId) &&
+    formData.panNumber && patterns.panNumber.test(formData.panNumber) &&
+    formData.cnfPanNumber && patterns.cnfPanNumber.test(formData.cnfPanNumber) &&
+    formData.aadhaarNumber && patterns.aadhaarNumber.test(formData.aadhaarNumber) &&
+    formData.panNumber === formData.cnfPanNumber &&
+    !errors.mobileNumberLinkedToAadhaar &&
+    !errors.emailId &&
+    !errors.panNumber &&
+    !errors.cnfPanNumber &&
+    !errors.aadhaarNumber;
+
   return (
     <div className="validate-form-container">
       <div className="validate-card">
@@ -191,7 +204,7 @@ const ValidateSA = ({ onFormSubmit, processVariables }) => {
             {errors.aadhaarNumber && <span className="error-message">{errors.aadhaarNumber}</span>}
           </div>
 
-          <button type="submit" className="submit-btn" disabled={isSubmitting}>
+          <button type="submit" className="submit-btn" disabled={!isFormReady || isSubmitting}>
             {isSubmitting ? 'Processing...' : 'Proceed'}
             {!isSubmitting && (
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

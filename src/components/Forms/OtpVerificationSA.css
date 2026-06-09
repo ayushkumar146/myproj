@@ -300,7 +300,7 @@
 .proceed-submit-btn {
   width: 100%;
   height: var(--input-height);
-  background: var(--primary-blue);
+  background: rgba(0, 51, 102, 1);
   color: white;
   border: none;
   border-radius: 12px;
@@ -327,8 +327,8 @@
 }
 
 .proceed-submit-btn:disabled {
-  background: #CBD5E1;
-  color: #94A3B8;
+  background: rgba(73, 124, 182, 1);
+  color: white;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;

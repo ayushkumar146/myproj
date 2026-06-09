@@ -138,7 +138,7 @@
 .submit-btn {
   width: 100%;
   height: var(--input-height);
-  background: var(--primary-blue);
+  background: rgba(0, 51, 102, 1);
   color: white;
   border: none;
   border-radius: 12px;
@@ -153,21 +153,22 @@
   gap: 0.5rem;
 }
 
-.submit-btn:hover {
+.submit-btn:hover:not(:disabled) {
   background: var(--secondary-blue);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 51, 102, 0.2);
 }
 
-.submit-btn:active {
+.submit-btn:active:not(:disabled) {
   transform: translateY(0);
 }
 
 .submit-btn:disabled {
-  background: #CBD5E1;
+  background: rgba(73, 124, 182, 1);
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
+  color: white;
 }
 
 /* Micro-animations for inputs */
