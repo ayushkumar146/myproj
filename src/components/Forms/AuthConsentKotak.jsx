@@ -5,6 +5,37 @@ const AuthConsentKotak = ({ onFormSubmit, onClose }) => {
   const [consentChecked, setConsentChecked] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Language Dropdown Selector
+  const [selectedLanguage, setSelectedLanguage] = useState('English');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const languages = [
+    'English',
+    'Hindi',
+    'Telugu',
+    'Assamese',
+    'Bengali',
+    'Gujarati',
+    'Kannada',
+    'Malyalam',
+    'Manipuri',
+    'Marathi',
+    'Odia',
+    'Punjabi',
+    'Tamil',
+    'Urdu'
+  ];
+
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (!e.target.closest('.audio-lang-selector')) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener('click', handleOutsideClick);
+    return () => document.removeEventListener('click', handleOutsideClick);
+  }, []);
+
   // Custom Audio Simulation
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioTime, setAudioTime] = useState(0);
@@ -39,9 +70,11 @@ const AuthConsentKotak = ({ onFormSubmit, onClose }) => {
     setIsSubmitting(true);
     const payload = {
       authConsentKotak: {
-        consentProvided: true
+        consentProvided: true,
+        language: selectedLanguage
       },
-      consentProvided: true
+      consentProvided: true,
+      consentLanguage: selectedLanguage
     };
     onFormSubmit(payload);
   };
@@ -96,10 +129,35 @@ const AuthConsentKotak = ({ onFormSubmit, onClose }) => {
               </svg>
             </button>
 
-            <div className="audio-lang-selector">
+            <div className="audio-lang-selector" onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
               <span className="lang-icon">🌐</span>
-              <span className="lang-name">English</span>
+              <span className="lang-name">{selectedLanguage}</span>
               <span className="lang-arrow">▼</span>
+
+              {isDropdownOpen && (
+                <div className="lang-dropdown-menu">
+                  {languages.map((lang) => (
+                    <div 
+                      key={lang} 
+                      className={`lang-dropdown-item ${selectedLanguage === lang ? 'selected' : ''}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedLanguage(lang);
+                        setIsDropdownOpen(false);
+                      }}
+                    >
+                      <span className="lang-item-text">{lang}</span>
+                      {selectedLanguage === lang && (
+                        <span className="lang-checkmark-badge">
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                          </svg>
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
