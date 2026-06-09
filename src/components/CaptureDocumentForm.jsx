@@ -129,43 +129,37 @@ const CaptureDocumentForm = ({ processVariables, onFormSubmit, onBack }) => {
     };
 
     return (
-        <div className="capture-document-container">
-            <header className="capture-header">
-                <div className="back-icon" onClick={onBack}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M19 12H5" stroke="#003366" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        <path d="M12 19L5 12L12 5" stroke="#003366" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                </div>
-                <h1 className="capture-title">Capture Document</h1>
-            </header>
+        <div className="pd-container" style={{ minHeight: '100vh', fontFamily: "'Frutiger LT Std', 'Outfit', 'Inter', sans-serif" }}>
+            <div className="pd-card" style={{ padding: 0, overflow: 'hidden' }}>
+                <header className="capture-header">
+                    <h1 className="capture-title">Capture Document</h1>
+                </header>
 
-            <main className="capture-content">
-                <p className="product-instruction">Product Provide The Bellow Documents</p>
+                <main className="capture-content">
+                    <p className="product-instruction">Product Provide The Bellow Documents</p>
 
-                <table className="info-table">
-                    <tbody>
-                        <tr className="info-row">
-                            <td className="info-label">CRN :</td>
-                            <td className="info-value">{crn}</td>
-                        </tr>
-                        <tr className="info-row">
-                            <td className="info-label">Account Number :</td>
-                            <td className="info-value">{accountNumber}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                    <div className="info-table">
+                        <div className="info-row">
+                            <div className="info-label">CRN :</div>
+                            <div className="info-value">{crn}</div>
+                        </div>
+                        <div className="info-row">
+                            <div className="info-label">Account Number :</div>
+                            <div className="info-value">{accountNumber}</div>
+                        </div>
+                    </div>
 
-                <CaptureSlot id="mitc" label="MITC Signature" placeholder="Capture MITC Signature" required />
-                <CaptureSlot id="signatureCard" label="Signature Card" placeholder="Capture Signature Card" required />
-                <CaptureSlot id="others1" label="Others 1" placeholder="Capture Other 1 Documents" optional />
-                <CaptureSlot id="others2" label="Others 2" placeholder="Capture Other 2 Documents" optional />
-                <CaptureSlot id="others3" label="Others 3" placeholder="Capture Other 3 Documents" optional />
-            </main>
+                    <CaptureSlot id="mitc" label="MITC Signature" placeholder="Capture MITC Signature" required />
+                    <CaptureSlot id="signatureCard" label="Signature Card" placeholder="Capture Signature Card" required />
+                    <CaptureSlot id="others1" label="Others 1" placeholder="Capture Other 1 Documents" optional />
+                    <CaptureSlot id="others2" label="Others 2" placeholder="Capture Other 2 Documents" optional />
+                    <CaptureSlot id="others3" label="Others 3" placeholder="Capture Other 3 Documents" optional />
+                </main>
 
-            <footer className="footer-actions">
-                <button className="proceed-btn" onClick={handleProceed}>Proceed</button>
-            </footer>
+                <footer className="footer-actions">
+                    <button className="proceed-btn" onClick={handleProceed}>Proceed</button>
+                </footer>
+            </div>
 
             {isCameraOpen && (
                 <div className="camera-overlay">

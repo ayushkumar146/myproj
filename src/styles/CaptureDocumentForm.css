@@ -1,20 +1,22 @@
 .capture-document-container {
-    background-color: #ffffff;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    align-items: center;
     font-family: 'Frutiger LT Std', 'Outfit', 'Inter', sans-serif;
 }
 
 .capture-header {
     background: #ffffff;
     padding: 16px;
-    border-bottom: 1px solid #eee;
     display: flex;
     align-items: center;
     position: sticky;
     top: 0;
     z-index: 100;
+    width: 100%;
+    max-width: 500px;
+    box-sizing: border-box;
 }
 
 .back-icon {
@@ -29,44 +31,58 @@
     font-weight: 700;
     color: #1a1a1a;
     margin: 0;
-    padding-right: 40px; /* offset back icon for center */
 }
 
 .capture-content {
     padding: 20px;
     flex: 1;
+    width: 100%;
+    max-width: 500px;
+    box-sizing: border-box;
 }
 
 .product-instruction {
-    color: #888;
-    font-size: 0.9rem;
-    margin-bottom: 15px;
+    font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    text-align: left;
+    color: #999;
+    margin-bottom: 20px;
 }
 
 .info-table {
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    border-collapse: collapse;
     margin-bottom: 25px;
+    border: 1px solid #E2E8F0;
+    border-radius: 4px;
 }
 
 .info-row {
-    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.info-row:not(:last-child) {
+    border-bottom: 1px solid #E2E8F0;
 }
 
 .info-label {
-    padding: 12px 0;
+    padding: 16px;
     color: #333;
-    font-weight: 500;
-    font-size: 0.95rem;
-    width: 40%;
+    font-size: 15px;
+    width: 50%;
 }
 
 .info-value {
-    padding: 12px 0;
+    padding: 16px;
     color: #1a1a1a;
-    font-weight: 600;
-    font-size: 0.95rem;
-    text-align: right;
+    font-size: 15px;
+    text-align: left;
 }
 
 .capture-section {
@@ -74,43 +90,44 @@
 }
 
 .section-label {
-    font-family: 'Frutiger LT Std', sans-serif;
+    font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
     font-weight: 400;
-    font-style: normal;
     font-size: 14px;
-    color: hsla(208, 85%, 29%, 1);
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: rgba(11, 77, 136, 1);
     margin-bottom: 10px;
 }
 
 .section-label .required {
-    color: #ff0000;
+    color: #EF4444;
     margin-left: 2px;
 }
 
 .section-label .optional {
-    color: #888;
-    font-weight: 400;
-    font-size: 0.85rem;
+    color: #999;
+    font-size: 14px;
     margin-left: 4px;
 }
 
 .capture-slot {
-    border: 1px solid hsla(0, 0%, 80%, 1);
-    border-radius: 8px;
-    padding: 14px 16px;
+    background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='6' ry='6' stroke='%23cccccc' stroke-width='1.5' stroke-dasharray='10%2c 8' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+    border-radius: 6px;
+    padding: 16px;
     display: flex;
     align-items: center;
     cursor: pointer;
-    transition: border-color 0.2s, background-color 0.2s;
-    background-color: #fcfcfc;
-    overflow: hidden;
+    transition: background-color 0.2s;
+    background-color: #ffffff;
     position: relative;
     min-height: 56px;
 }
 
 .capture-slot.captured {
-    border-style: solid;
+    background-image: none;
+    border: 1px solid #ccc;
     padding: 0;
+    overflow: hidden;
 }
 
 .preview-container {
@@ -246,6 +263,9 @@
     border-top: 1px solid #eee;
     position: sticky;
     bottom: 0;
+    width: 100%;
+    max-width: 500px;
+    box-sizing: border-box;
 }
 
 .proceed-btn {

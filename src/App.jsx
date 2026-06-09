@@ -240,7 +240,7 @@ function App() {
       ) : (
         <div className="form-view">
           {/* Conditional Rendering: Custom Capture Form vs Default Dynamic Form */}
-          {isCaptureDocumentForm(formSchema) ? (
+          {isCaptureDocumentForm(formSchema) || formSchema?.formKey === 'capture_document_sa' ? (
             <CaptureDocumentForm
               key={currentTask.userTaskKey}
               processVariables={processVariables}
