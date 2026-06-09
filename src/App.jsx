@@ -13,6 +13,7 @@ import CaptureDocumentForm from './components/CaptureDocumentForm';
 import LoginPage from './components/LoginPage';
 import ValidateSA from './components/Forms/ValidateSA';
 import OtpVerificationSA from './components/Forms/OtpVerificationSA';
+import AadhaarValidate from './components/Forms/AadhaarValidate';
 
 
 function App() {
@@ -243,6 +244,12 @@ function App() {
             />
           ) : formSchema?.formKey === 'otp_verification_sa' ? (
             <OtpVerificationSA
+              key={currentTask.userTaskKey}
+              processVariables={processVariables}
+              onFormSubmit={handleFormSubmit}
+            />
+          ) : formSchema?.formKey === 'aadhar_validate' ? (
+            <AadhaarValidate
               key={currentTask.userTaskKey}
               processVariables={processVariables}
               onFormSubmit={handleFormSubmit}

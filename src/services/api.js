@@ -174,6 +174,18 @@ export const getFormSchema = async (accessToken, formKey) => {
     return getMockOtpVerificationSchema();
   }
 
+  if (formKey === 'aadhar_validate') {
+    console.log('Returning mock Aadhaar validate schema directly for key:', formKey);
+    return {
+      form: {
+        id: "aadhar_validate",
+        type: "default",
+        components: []
+      },
+      processVariables: {}
+    };
+  }
+
   const url = `https://bank-enc-dec-kotakfiplatform.bharatkioskbanking.com/kotak/los/camunda/getFormSchema/${formKey}`;
   
   const headers = {
@@ -195,6 +207,10 @@ export const getFormSchema = async (accessToken, formKey) => {
         console.warn(`getFormSchema failed with status ${response.status}, falling back to mock OTP Verification schema`);
         return getMockOtpVerificationSchema();
       }
+      if (formKey && (formKey.toLowerCase().includes('aadhar') || formKey.toLowerCase().includes('validate'))) {
+        console.warn(`getFormSchema failed with status ${response.status}, falling back to mock Aadhaar Validate schema`);
+        return { form: { id: "aadhar_validate", type: "default", components: [] }, processVariables: {} };
+      }
       const errorText = await response.text();
       console.error(`getFormSchema failed with status ${response.status}:`, errorText);
       throw new Error(`Server returned ${response.status} for form schema request.`);
@@ -205,6 +221,10 @@ export const getFormSchema = async (accessToken, formKey) => {
     if (formKey && (formKey.toLowerCase().includes('otp') || formKey.toLowerCase().includes('verification') || formKey === 'otp_verification_sa')) {
       console.warn(`getFormSchema encountered error: ${error.message}, falling back to mock OTP Verification schema`);
       return getMockOtpVerificationSchema();
+    }
+    if (formKey && (formKey.toLowerCase().includes('aadhar') || formKey.toLowerCase().includes('validate') || formKey === 'aadhar_validate')) {
+      console.warn(`getFormSchema encountered error: ${error.message}, falling back to mock Aadhaar Validate schema`);
+      return { form: { id: "aadhar_validate", type: "default", components: [] }, processVariables: {} };
     }
     throw error;
   }
