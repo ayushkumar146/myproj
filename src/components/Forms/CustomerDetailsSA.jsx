@@ -56,147 +56,100 @@ const CustomerDetailsSA = ({ onFormSubmit, processVariables }) => {
     console.log("CustomerDetailsSA received processVariables:", processVariables);
   }, [processVariables]);
 
-  // Display fields from Camunda process variables (re-computed on every render)
-  const name = getProcessVar('customerDetails.name') || getProcessVar('customer.name') || getProcessVar('name');
-  const age = getProcessVar('customerDetails.age') || getProcessVar('age');
-  const gender = getProcessVar('customerDetails.gender') || getProcessVar('gender');
-  const dob = getProcessVar('customerDetails.dob') || getProcessVar('dob');
+  // Display fields — re-computed on every render from processVariables
+  const name        = getProcessVar('customerDetails.name')        || getProcessVar('customer.name') || getProcessVar('name');
+  const age         = getProcessVar('customerDetails.age')         || getProcessVar('age');
+  const gender      = getProcessVar('customerDetails.gender')      || getProcessVar('gender');
+  const dob         = getProcessVar('customerDetails.dob')         || getProcessVar('dob');
   const addressLine = getProcessVar('customerDetails.addressLine') || getProcessVar('addressLine');
-  const city = getProcessVar('customerDetails.city') || getProcessVar('city');
-  const pincode = getProcessVar('customerDetails.pincode') || getProcessVar('pincode');
-  const state = getProcessVar('customerDetails.state') || getProcessVar('state');
+  const city        = getProcessVar('customerDetails.city')        || getProcessVar('city');
+  const pincode     = getProcessVar('customerDetails.pincode')     || getProcessVar('pincode');
+  const state       = getProcessVar('customerDetails.state')       || getProcessVar('state');
 
-  // State variables for editable inputs — initialized empty, synced via useEffect when processVariables arrives
-  const [isCommunicationAddressSame, setIsCommunicationAddressSame] = useState(true);
-  const [commZipcode, setCommZipcode] = useState('');
-  const [commCity, setCommCity] = useState('');
-  const [commState, setCommState] = useState('');
-  const [commAddrLine1, setCommAddrLine1] = useState('');
-  const [commAddrLine2, setCommAddrLine2] = useState('');
-  const [commAddrLine3, setCommAddrLine3] = useState('');
-  const [commAddrLandmark, setCommAddrLandmark] = useState('');
+  // ── Compute initial values synchronously from processVariables ──────────────
+  // React only uses these on first render. The component remounts fresh each
+  // time the form changes (App.jsx nulls formSchema first), so this is safe.
+  const _rawSame    = getProcessVar('customerDetails.isCommunicationAddressSame') || getProcessVar('isCommunicationAddressSame');
+  const _initSame   = _rawSame !== '' ? (_rawSame === true || _rawSame === 'true') : true;
 
-  // Sync all fields from processVariables whenever Camunda sends updated variables
-  useEffect(() => {
-    if (!processVariables) return;
+  const _camZip     = getProcessVar('customerDetails.commZipcode')     || getProcessVar('commZipcode')     || '';
+  const _camCity    = getProcessVar('customerDetails.commCity')         || getProcessVar('commCity')         || '';
+  const _camState   = getProcessVar('customerDetails.commState')        || getProcessVar('commState')        || '';
+  const _camLine1   = getProcessVar('customerDetails.commAddrLine1')    || getProcessVar('commAddrLine1')    || '';
+  const _camLine2   = getProcessVar('customerDetails.commAddrLine2')    || getProcessVar('commAddrLine2')    || '';
+  const _camLine3   = getProcessVar('customerDetails.commAddrLine3')    || getProcessVar('commAddrLine3')    || '';
+  const _camLandmark= getProcessVar('customerDetails.CommAddrLandmark') || getProcessVar('customerDetails.commAddrLandmark') || getProcessVar('CommAddrLandmark') || getProcessVar('commAddrLandmark') || '';
 
-    // Read isCommunicationAddressSame from Camunda (default: true)
-    const rawVal = getProcessVar('customerDetails.isCommunicationAddressSame') || getProcessVar('isCommunicationAddressSame');
-    const isSame = rawVal !== '' ? (rawVal === true || rawVal === 'true') : true;
-    setIsCommunicationAddressSame(isSame);
+  // When isCommunicationAddressSame=true and comm fields are empty, fall back to Aadhaar address
+  const _initZip    = _initSame ? (_camZip    || getProcessVar('customerDetails.pincode')    || getProcessVar('pincode')    || '') : _camZip;
+  const _initCity   = _initSame ? (_camCity   || getProcessVar('customerDetails.city')       || getProcessVar('city')       || '') : _camCity;
+  const _initState  = _initSame ? (_camState  || getProcessVar('customerDetails.state')      || getProcessVar('state')      || '') : _camState;
+  const _initLine1  = _initSame ? (_camLine1  || getProcessVar('customerDetails.addressLine')|| getProcessVar('addressLine')|| '') : _camLine1;
+  const _initLine2  = _initSame ? (_camLine2  || getProcessVar('customerDetails.addressLine')|| getProcessVar('addressLine')|| '') : _camLine2;
+  const _initLine3  = _initSame ? (_camLine3  || getProcessVar('customerDetails.addressLine')|| getProcessVar('addressLine')|| '') : _camLine3;
+  // ────────────────────────────────────────────────────────────────────────────
 
-    // Read comm address fields from Camunda
-    const camundaZip      = getProcessVar('customerDetails.commZipcode')     || getProcessVar('commZipcode')     || '';
-    const camundaCity     = getProcessVar('customerDetails.commCity')         || getProcessVar('commCity')         || '';
-    const camundaState    = getProcessVar('customerDetails.commState')        || getProcessVar('commState')        || '';
-    const camundaLine1    = getProcessVar('customerDetails.commAddrLine1')    || getProcessVar('commAddrLine1')    || '';
-    const camundaLine2    = getProcessVar('customerDetails.commAddrLine2')    || getProcessVar('commAddrLine2')    || '';
-    const camundaLine3    = getProcessVar('customerDetails.commAddrLine3')    || getProcessVar('commAddrLine3')    || '';
-    const camundaLandmark = getProcessVar('customerDetails.CommAddrLandmark') || getProcessVar('customerDetails.commAddrLandmark') || getProcessVar('CommAddrLandmark') || getProcessVar('commAddrLandmark') || '';
-
-    // Resolve Aadhaar address values (for auto-fill when same)
-    const aadhaarZip   = getProcessVar('customerDetails.pincode')     || getProcessVar('pincode')     || '';
-    const aadhaarCity  = getProcessVar('customerDetails.city')         || getProcessVar('city')         || '';
-    const aadhaarState = getProcessVar('customerDetails.state')        || getProcessVar('state')        || '';
-    const aadhaarLine  = getProcessVar('customerDetails.addressLine')  || getProcessVar('addressLine')  || '';
-
-    // If isCommunicationAddressSame is true and Camunda fields are empty, use Aadhaar address
-    if (isSame) {
-      setCommZipcode(camundaZip   || aadhaarZip);
-      setCommCity(camundaCity     || aadhaarCity);
-      setCommState(camundaState   || aadhaarState);
-      setCommAddrLine1(camundaLine1 || aadhaarLine);
-      setCommAddrLine2(camundaLine2 || aadhaarLine);
-      setCommAddrLine3(camundaLine3 || aadhaarLine);
-      setCommAddrLandmark(camundaLandmark);
-    } else {
-      setCommZipcode(camundaZip);
-      setCommCity(camundaCity);
-      setCommState(camundaState);
-      setCommAddrLine1(camundaLine1);
-      setCommAddrLine2(camundaLine2);
-      setCommAddrLine3(camundaLine3);
-      setCommAddrLandmark(camundaLandmark);
-    }
-  }, [processVariables]);
-
-  // Validation state variables
-  const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  // Editable state — initialised from Camunda values computed above
+  const [isCommunicationAddressSame, setIsCommunicationAddressSame] = useState(_initSame);
+  const [commZipcode,      setCommZipcode]      = useState(_initZip);
+  const [commCity,         setCommCity]          = useState(_initCity);
+  const [commState,        setCommState]         = useState(_initState);
+  const [commAddrLine1,    setCommAddrLine1]     = useState(_initLine1);
+  const [commAddrLine2,    setCommAddrLine2]     = useState(_initLine2);
+  const [commAddrLine3,    setCommAddrLine3]     = useState(_initLine3);
+  const [commAddrLandmark, setCommAddrLandmark]  = useState(_camLandmark);
+  const [isSubmitting,     setIsSubmitting]      = useState(false);
 
   // Address pattern validator
   const addressPattern = /^(?=.*[A-Za-z0-9])[A-Za-z0-9,().\-:@#_={}| ]+$/;
   const addressPatternMessage = "Address must contain letters/numbers and only , ( ) . - : @ # _ = { } | special characters.";
 
-  // Run validations whenever inputs change
-  useEffect(() => {
-    // If hidden, no validation needed
-    if (!isCommunicationAddressSame) {
-      setErrors({});
-      return;
-    }
+  // Validation errors — derived directly during render via useMemo (no useState/useEffect needed)
+  const errors = React.useMemo(() => {
+    if (!isCommunicationAddressSame) return {};
 
-    const newErrors = {};
+    const e = {};
 
-    // Zipcode: required, 6 digits
-    if (!commZipcode) {
-      newErrors.commZipcode = 'Communication Zipcode is required';
-    } else if (!/^\d{6}$/.test(commZipcode)) {
-      newErrors.commZipcode = 'Communication Zipcode must be exactly 6 digits';
-    }
+    if (!commZipcode)
+      e.commZipcode = 'Communication Zipcode is required';
+    else if (!/^\d{6}$/.test(commZipcode))
+      e.commZipcode = 'Communication Zipcode must be exactly 6 digits';
 
-    // City: required
-    if (!commCity.trim()) {
-      newErrors.commCity = 'Communication City is required';
-    }
+    if (!commCity.trim())
+      e.commCity = 'Communication City is required';
 
-    // State: required
-    if (!commState.trim()) {
-      newErrors.commState = 'Communication State is required';
-    }
+    if (!commState.trim())
+      e.commState = 'Communication State is required';
 
-    // Addr Line 1: required, length 1-30, pattern match
-    if (!commAddrLine1) {
-      newErrors.commAddrLine1 = 'Communication Addr Line1 is required';
-    } else if (commAddrLine1.length > 30) {
-      newErrors.commAddrLine1 = 'Must be 30 characters or less';
-    } else if (!addressPattern.test(commAddrLine1)) {
-      newErrors.commAddrLine1 = addressPatternMessage;
-    }
+    if (!commAddrLine1)
+      e.commAddrLine1 = 'Communication Addr Line1 is required';
+    else if (commAddrLine1.length > 30)
+      e.commAddrLine1 = 'Must be 30 characters or less';
+    else if (!addressPattern.test(commAddrLine1))
+      e.commAddrLine1 = addressPatternMessage;
 
-    // Addr Line 2: optional but if filled, check length and pattern
     if (commAddrLine2) {
-      if (commAddrLine2.length > 30) {
-        newErrors.commAddrLine2 = 'Must be 30 characters or less';
-      } else if (!addressPattern.test(commAddrLine2)) {
-        newErrors.commAddrLine2 = addressPatternMessage;
-      }
+      if (commAddrLine2.length > 30)
+        e.commAddrLine2 = 'Must be 30 characters or less';
+      else if (!addressPattern.test(commAddrLine2))
+        e.commAddrLine2 = addressPatternMessage;
     }
 
-    // Addr Line 3: optional but if filled, check length and pattern
     if (commAddrLine3) {
-      if (commAddrLine3.length > 30) {
-        newErrors.commAddrLine3 = 'Must be 30 characters or less';
-      } else if (!addressPattern.test(commAddrLine3)) {
-        newErrors.commAddrLine3 = addressPatternMessage;
-      }
+      if (commAddrLine3.length > 30)
+        e.commAddrLine3 = 'Must be 30 characters or less';
+      else if (!addressPattern.test(commAddrLine3))
+        e.commAddrLine3 = addressPatternMessage;
     }
 
-    // Addr Landmark: required
-    if (!commAddrLandmark.trim()) {
-      newErrors.commAddrLandmark = 'Communication Addr Landmark is required';
-    }
+    if (!commAddrLandmark.trim())
+      e.commAddrLandmark = 'Communication Addr Landmark is required';
 
-    setErrors(newErrors);
+    return e;
   }, [
     isCommunicationAddressSame,
-    commZipcode,
-    commCity,
-    commState,
-    commAddrLine1,
-    commAddrLine2,
-    commAddrLine3,
-    commAddrLandmark
+    commZipcode, commCity, commState,
+    commAddrLine1, commAddrLine2, commAddrLine3, commAddrLandmark
   ]);
 
   const handleSubmit = (e) => {
