@@ -51,7 +51,7 @@
   border: 1px solid #E2E8F0;
   border-radius: 12px;
   padding: 24px;
-  background-color: #F8FAFC;
+  background-color: #FFFFFF;
   box-sizing: border-box;
 }
 
@@ -261,7 +261,7 @@ textarea.form-input-field {
 }
 
 .form-input-field:read-only {
-  background-color: #EDEDED;
+  background-color: #FFFFFF;
   color: #374151;
   cursor: default;
   border: 1px solid rgba(204, 204, 204, 1);
