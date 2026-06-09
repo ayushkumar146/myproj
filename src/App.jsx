@@ -22,7 +22,7 @@ import PersonalDetailsSA from './components/Forms/PersonalDetailsSA';
 import ProductSectionSA from './components/Forms/ProductSectionSA';
 import NomineeDetailsSA from './components/Forms/NomineeDetailsSA';
 import DeclarationSA from './components/Forms/DeclarationSA';
-
+import AadhaarSeedingCheckSA from './components/Forms/AadhaarSeedingCheckSA';
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -314,6 +314,12 @@ function App() {
             />
           ) : formSchema?.formKey === 'declaration_sa' ? (
             <DeclarationSA
+              key={currentTask.userTaskKey}
+              processVariables={processVariables}
+              onFormSubmit={handleFormSubmit}
+            />
+          ) : formSchema?.formKey === 'aadhaar_seeding_check_sa' ? (
+            <AadhaarSeedingCheckSA
               key={currentTask.userTaskKey}
               processVariables={processVariables}
               onFormSubmit={handleFormSubmit}
