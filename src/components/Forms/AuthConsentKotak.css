@@ -62,12 +62,16 @@
 }
 
 .modal-title {
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: #0F172A;
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-size: 22px;
+  font-weight: 400;
+  font-style: normal; /* 55 Roman */
+  color: rgba(0, 0, 0, 1);
   text-align: center;
+  vertical-align: middle;
   margin: 0 0 20px 0;
-  line-height: 1.2;
+  line-height: 100%;
+  letter-spacing: 0.1px;
 }
 
 /* Audio Player Section */
@@ -78,10 +82,12 @@
 }
 
 .audio-section-title {
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: #475569;
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  color: rgba(0, 0, 0, 1);
   margin: 0 0 8px 0;
+  line-height: 100%;
 }
 
 .custom-audio-player {
@@ -96,7 +102,30 @@
   width: 100%;
 }
 
-.audio-play-btn, .audio-volume-btn {
+.audio-play-btn {
+  background: transparent !important;
+  color: rgba(0, 51, 102, 1) !important; /* Blue icon color */
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px !important;
+  height: 24px !important;
+  outline: none;
+  flex-shrink: 0;
+  padding: 0 !important;
+  box-shadow: none !important;
+  transition: all 0.2s ease;
+}
+
+.audio-play-btn:hover {
+  transform: scale(1.1);
+  color: rgba(0, 51, 102, 0.8) !important;
+  background: transparent !important;
+}
+
+.audio-volume-btn {
   background: none;
   border: none;
   color: #475569;
@@ -109,7 +138,7 @@
   flex-shrink: 0;
 }
 
-.audio-play-btn:hover, .audio-volume-btn:hover {
+.audio-volume-btn:hover {
   color: #0F172A;
 }
 
@@ -281,10 +310,28 @@
 }
 
 /* Scrollable legal consent text from Figma */
+.checkbox-text {
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  color: rgba(0, 0, 0, 1);
+  line-height: 100%;
+}
+
+.radio-text {
+  font-size: 0.925rem;
+  color: var(--text-main);
+  font-weight: 500;
+}
+
 .consent-scroll-text {
-  font-size: 0.775rem;
-  color: #334155;
-  line-height: 1.45;
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-weight: 300;
+  font-style: normal; /* 45 Light */
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0;
+  color: rgba(0, 0, 0, 1);
   text-align: left;
   max-height: 180px;
   overflow-y: auto;
