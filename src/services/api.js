@@ -198,6 +198,140 @@ export const getFormSchema = async (accessToken, formKey) => {
     };
   }
 
+  if (formKey === 'face_scan_kotak') {
+    console.log('Returning mock Face Scan schema directly for key:', formKey);
+    return {
+      form: {
+        components: [
+          {
+            "label": "Group",
+            "components": [],
+            "showOutline": true,
+            "type": "group",
+            "layout": {
+              "row": "Row_1dktbvb",
+              "columns": null
+            },
+            "id": "Field_15m6ms7"
+          },
+          {
+            "label": "Proceed",
+            "action": "submit",
+            "type": "button",
+            "layout": {
+              "row": "Row_1dvj3gy",
+              "columns": null
+            },
+            "id": "Field_1g61tbl"
+          }
+        ],
+        type: "default",
+        id: "face_scan_kotak",
+        executionPlatform: "Camunda Cloud",
+        executionPlatformVersion: "8.8.0",
+        exporter: {
+          "name": "Camunda Modeler",
+          "version": "5.44.0"
+        },
+        schemaVersion: 19
+      },
+      processVariables: {}
+    };
+  }
+
+  if (formKey === 'finger_print_kotak') {
+    console.log('Returning mock Fingerprint Scan schema directly for key:', formKey);
+    return {
+      form: {
+        components: [
+          {
+            "label": "Group",
+            "components": [],
+            "showOutline": true,
+            "type": "group",
+            "layout": {
+              "row": "Row_1m0uwog",
+              "columns": null
+            },
+            "id": "Field_0j44boz"
+          },
+          {
+            "label": "Proceed",
+            "action": "submit",
+            "type": "button",
+            "layout": {
+              "row": "Row_19u4lzu",
+              "columns": null
+            },
+            "id": "Field_1fqmdrz"
+          }
+        ],
+        type: "default",
+        id: "finger_print_kotak",
+        executionPlatform: "Camunda Cloud",
+        executionPlatformVersion: "8.8.0",
+        exporter: {
+          "name": "Camunda Modeler",
+          "version": "5.44.0"
+        },
+        schemaVersion: 19
+      },
+      processVariables: {}
+    };
+  }
+
+  if (formKey === 'customer_details_sa') {
+    console.log('Returning mock Customer Details schema directly for key:', formKey);
+    return {
+      form: {
+        id: "customer_details_sa",
+        type: "default",
+        components: [
+          {
+            "label": "Group",
+            "components": [],
+            "showOutline": true,
+            "type": "group",
+            "layout": {
+              "row": "Row_1yc6qhl",
+              "columns": null
+            },
+            "id": "Field_1sh0gzm",
+            "path": "customerDetails"
+          }
+        ],
+        executionPlatform: "Camunda Cloud",
+        executionPlatformVersion: "8.8.0",
+        exporter: {
+          "name": "Camunda Modeler",
+          "version": "5.43.1"
+        },
+        schemaVersion: 19
+      },
+      processVariables: {
+        customerDetails: {
+          name: "Pabitra Patra",
+          age: "28",
+          gender: "MALE",
+          dob: "15-08-1998",
+          addressLine: "At- Po- Khandagiri",
+          city: "Bhubaneswar",
+          pincode: "751030",
+          state: "Odisha",
+          isCommunicationAddressSame: true,
+          fieldCount: "8",
+          commZipcode: "",
+          commCity: "",
+          commState: "",
+          commAddrLine1: "",
+          commAddrLine2: "",
+          commAddrLine3: "",
+          CommAddrLandmark: ""
+        }
+      }
+    };
+  }
+
   const url = `https://bank-enc-dec-kotakfiplatform.bharatkioskbanking.com/kotak/los/camunda/getFormSchema/${formKey}`;
   
   const headers = {
@@ -227,6 +361,58 @@ export const getFormSchema = async (accessToken, formKey) => {
         console.warn(`getFormSchema failed with status ${response.status}, falling back to mock Auth Consent schema`);
         return { form: { id: "auth_consent_kotak", type: "default", components: [] }, processVariables: {} };
       }
+      if (formKey && (formKey.toLowerCase().includes('face') || formKey.toLowerCase().includes('scan') || formKey === 'face_scan_kotak')) {
+        console.warn(`getFormSchema failed with status ${response.status}, falling back to mock Face Scan schema`);
+        return {
+          form: {
+            components: [
+              { "label": "Group", "components": [], "showOutline": true, "type": "group", "id": "Field_15m6ms7" },
+              { "label": "Proceed", "action": "submit", "type": "button", "id": "Field_1g61tbl" }
+            ],
+            type: "default",
+            id: "face_scan_kotak"
+          },
+          processVariables: {}
+        };
+      }
+      if (formKey && (formKey.toLowerCase().includes('finger') || formKey.toLowerCase().includes('print') || formKey === 'finger_print_kotak')) {
+        console.warn(`getFormSchema failed with status ${response.status}, falling back to mock Fingerprint Scan schema`);
+        return {
+          form: {
+            components: [
+              { "label": "Group", "components": [], "showOutline": true, "type": "group", "id": "Field_0j44boz" },
+              { "label": "Proceed", "action": "submit", "type": "button", "id": "Field_1fqmdrz" }
+            ],
+            type: "default",
+            id: "finger_print_kotak"
+          },
+          processVariables: {}
+        };
+      }
+      if (formKey && (formKey.toLowerCase().includes('customer') || formKey.toLowerCase().includes('details') || formKey === 'customer_details_sa')) {
+        console.warn(`getFormSchema failed with status ${response.status}, falling back to mock Customer Details schema`);
+        return {
+          form: {
+            id: "customer_details_sa",
+            type: "default",
+            components: [
+              { "label": "Group", "components": [], "showOutline": true, "type": "group", "id": "Field_1sh0gzm", "path": "customerDetails" }
+            ]
+          },
+          processVariables: {
+            customerDetails: {
+              name: "Pabitra Patra",
+              age: "28",
+              gender: "MALE",
+              dob: "15-08-1998",
+              addressLine: "At- Po- Khandagiri",
+              city: "Bhubaneswar",
+              pincode: "751030",
+              state: "Odisha"
+            }
+          }
+        };
+      }
       const errorText = await response.text();
       console.error(`getFormSchema failed with status ${response.status}:`, errorText);
       throw new Error(`Server returned ${response.status} for form schema request.`);
@@ -245,6 +431,67 @@ export const getFormSchema = async (accessToken, formKey) => {
     if (formKey && (formKey.toLowerCase().includes('auth') || formKey.toLowerCase().includes('consent') || formKey === 'auth_consent_kotak')) {
       console.warn(`getFormSchema encountered error: ${error.message}, falling back to mock Auth Consent schema`);
       return { form: { id: "auth_consent_kotak", type: "default", components: [] }, processVariables: {} };
+    }
+    if (formKey && (formKey.toLowerCase().includes('face') || formKey.toLowerCase().includes('scan') || formKey === 'face_scan_kotak')) {
+      console.warn(`getFormSchema encountered error: ${error.message}, falling back to mock Face Scan schema`);
+      return {
+        form: {
+          components: [
+            { "label": "Group", "components": [], "showOutline": true, "type": "group", "id": "Field_15m6ms7" },
+            { "label": "Proceed", "action": "submit", "type": "button", "id": "Field_1g61tbl" }
+          ],
+          type: "default",
+          id: "face_scan_kotak"
+        },
+        processVariables: {}
+      };
+    }
+    if (formKey && (formKey.toLowerCase().includes('finger') || formKey.toLowerCase().includes('print') || formKey === 'finger_print_kotak')) {
+      console.warn(`getFormSchema encountered error: ${error.message}, falling back to mock Fingerprint Scan schema`);
+      return {
+        form: {
+          components: [
+            { "label": "Group", "components": [], "showOutline": true, "type": "group", "id": "Field_0j44boz" },
+            { "label": "Proceed", "action": "submit", "type": "button", "id": "Field_1fqmdrz" }
+          ],
+          type: "default",
+          id: "finger_print_kotak"
+        },
+        processVariables: {}
+      };
+    }
+    if (formKey && (formKey.toLowerCase().includes('customer') || formKey.toLowerCase().includes('details') || formKey === 'customer_details_sa')) {
+      console.warn(`getFormSchema encountered error: ${error.message}, falling back to mock Customer Details schema`);
+      return {
+        form: {
+          id: "customer_details_sa",
+          type: "default",
+          components: [
+            { "label": "Group", "components": [], "showOutline": true, "type": "group", "id": "Field_1sh0gzm", "path": "customerDetails" }
+          ]
+        },
+        processVariables: {
+          customerDetails: {
+            name: "Pabitra Patra",
+            age: "28",
+            gender: "MALE",
+            dob: "15-08-1998",
+            addressLine: "At- Po- Khandagiri",
+            city: "Bhubaneswar",
+            pincode: "751030",
+            state: "Odisha",
+            isCommunicationAddressSame: true,
+            fieldCount: "8",
+            commZipcode: "",
+            commCity: "",
+            commState: "",
+            commAddrLine1: "",
+            commAddrLine2: "",
+            commAddrLine3: "",
+            CommAddrLandmark: ""
+          }
+        }
+      };
     }
     throw error;
   }

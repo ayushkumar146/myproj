@@ -1,0 +1,339 @@
+/* CustomerDetailsSA.css */
+
+.customer-details-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.customer-details-card {
+  width: 100%;
+  max-width: 500px;
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 32px 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+}
+
+.customer-details-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.customer-details-header h2 {
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #003366;
+  margin: 0 0 6px 0;
+  line-height: 100%;
+}
+
+.customer-details-header h3 {
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  color: #64748B;
+  margin: 0;
+  line-height: 100%;
+}
+
+.customer-details-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Aadhaar Card Render Block */
+.aadhaar-info-block {
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 24px;
+  background-color: #F8FAFC;
+  box-sizing: border-box;
+}
+
+.avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.avatar-circle {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  border: 2px dashed #00529B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+}
+
+.avatar-emoji {
+  font-size: 48px;
+}
+
+.customer-name {
+  margin-top: 12px;
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #0F172A;
+}
+
+.info-details-box {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-row.align-start {
+  align-items: flex-start;
+}
+
+.info-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #003366;
+  flex-shrink: 0;
+}
+
+.info-icon.mt-2 {
+  margin-top: 2px;
+}
+
+.info-value {
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #334155;
+}
+
+.info-value.line-15 {
+  line-height: 1.5;
+}
+
+/* Checkbox Alignment */
+.checkbox-group {
+  margin: 6px 0;
+}
+
+.checkbox-label {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 10px !important;
+  cursor: pointer;
+  width: 100%;
+}
+
+.hidden-checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.checkbox-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.checkbox-custom-box {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #00529B;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #FFFFFF;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  color: #FFFFFF;
+}
+
+.checkbox-custom-box.checked {
+  background-color: #00529B;
+  border-color: #00529B;
+}
+
+.checkbox-text.font-14 {
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-size: 13.5px;
+  font-weight: 400;
+  color: #334155;
+  line-height: 1.4;
+}
+
+/* Form Fields */
+.communication-address-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border-top: 1px solid #E2E8F0;
+  padding-top: 18px;
+}
+
+.fields-section-title {
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #0F172A;
+  margin: 0 0 4px 0;
+}
+
+.form-grid {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group.flex-1 {
+  flex: 1;
+  min-width: 0; /* Prevents overflow inside flex containers */
+}
+
+.input-label {
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-weight: 400;
+  font-style: normal; /* 55 Roman */
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #00529B; /* Kotak Blue 2 */
+}
+
+.req-star {
+  color: #EF4444;
+  margin-left: 2px;
+}
+
+.form-input-field {
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid rgba(204, 204, 204, 1);
+  border-radius: 8px;
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-size: 14px;
+  color: #0F172A;
+  background-color: #FFFFFF;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  outline: none;
+}
+
+textarea.form-input-field {
+  height: 80px !important;
+  padding: 10px 14px !important;
+  resize: vertical;
+}
+
+.form-input-field:read-only {
+  background-color: #EDEDED;
+  color: #374151;
+  cursor: default;
+  border: 1px solid rgba(204, 204, 204, 1);
+}
+
+.form-input-field:focus:not(:read-only) {
+  border-color: #00529B;
+  box-shadow: 0 0 0 3px rgba(0, 82, 155, 0.1);
+}
+
+.form-input-field.error-border {
+  border-color: #EF4444;
+}
+
+.form-input-field.error-border:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.error-text-message {
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  color: #EF4444;
+  margin-top: 2px;
+}
+
+/* Submit/Next button */
+.customer-details-submit-btn {
+  width: 100%;
+  height: 48px;
+  border: none;
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+  margin-top: 10px;
+}
+
+.customer-details-submit-btn:disabled {
+  background-color: rgba(73, 124, 182, 1); /* Disabled steel blue */
+  cursor: not-allowed;
+}
+
+.customer-details-submit-btn:not(:disabled) {
+  background-color: rgba(0, 51, 102, 1); /* Active midnight blue */
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 51, 102, 0.15);
+}
+
+.customer-details-submit-btn:not(:disabled):hover {
+  background-color: #002244;
+}
+
+/* Animations */
+.animate-fade-down {
+  animation: fadeDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: top;
+}
+
+@keyframes fadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

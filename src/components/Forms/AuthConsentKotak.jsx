@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import './AuthConsentKotak.css';
 
-const AuthConsentKotak = ({ onFormSubmit, onClose }) => {
-  const [consentChecked, setConsentChecked] = useState(false);
+const AuthConsentKotak = ({ onFormSubmit, onClose, processVariables }) => {
+  const [consentChecked, setConsentChecked] = useState(
+    processVariables?.authConsentKotak?.consentProvided !== undefined
+      ? processVariables.authConsentKotak.consentProvided
+      : (processVariables?.consentProvided !== undefined ? processVariables.consentProvided : false)
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Language Dropdown Selector
-  const [selectedLanguage, setSelectedLanguage] = useState('English');
+  const [selectedLanguage, setSelectedLanguage] = useState(
+    processVariables?.authConsentKotak?.language || processVariables?.consentLanguage || 'English'
+  );
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const languages = [

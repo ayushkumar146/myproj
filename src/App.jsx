@@ -15,6 +15,9 @@ import ValidateSA from './components/Forms/ValidateSA';
 import OtpVerificationSA from './components/Forms/OtpVerificationSA';
 import AadhaarValidate from './components/Forms/AadhaarValidate';
 import AuthConsentKotak from './components/Forms/AuthConsentKotak';
+import FaceScanKotak from './components/Forms/FaceScanKotak';
+import FingerprintScanKotak from './components/Forms/FingerprintScanKotak';
+import CustomerDetailsSA from './components/Forms/CustomerDetailsSA';
 
 
 function App() {
@@ -75,7 +78,10 @@ function App() {
 
       console.log(`[loadTaskForm] Updating state for task: ${taskName} with actualFormKey: ${actualFormKey}`, schema);
       setFormSchema({ ...schema, taskName, formKey: actualFormKey });
-      setProcessVariables(schema.processVariables || {});
+      setProcessVariables(prev => ({
+        ...prev,
+        ...(schema.processVariables || schema.variables || schema.form?.processVariables || schema.form?.variables || {})
+      }));
       setCurrentTask({ userTaskKey: taskKey, name: taskName });
       setView('form');
       setMessage('');
@@ -260,11 +266,30 @@ function App() {
               {formSchema?.formKey === 'auth_consent_kotak' && (
                 <AuthConsentKotak
                   key="auth-consent-modal"
+                  processVariables={processVariables}
                   onFormSubmit={handleFormSubmit}
                   onClose={() => setView('dashboard')}
                 />
               )}
             </>
+          ) : formSchema?.formKey === 'face_scan_kotak' ? (
+            <FaceScanKotak
+              key={currentTask.userTaskKey}
+              processVariables={processVariables}
+              onFormSubmit={handleFormSubmit}
+            />
+          ) : formSchema?.formKey === 'finger_print_kotak' ? (
+            <FingerprintScanKotak
+              key={currentTask.userTaskKey}
+              processVariables={processVariables}
+              onFormSubmit={handleFormSubmit}
+            />
+          ) : formSchema?.formKey === 'customer_details_sa' ? (
+            <CustomerDetailsSA
+              key={currentTask.userTaskKey}
+              processVariables={processVariables}
+              onFormSubmit={handleFormSubmit}
+            />
           ) : (
             <div className="unsupported-form-view">
               <h2>Form Implementation Pending</h2>

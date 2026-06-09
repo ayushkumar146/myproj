@@ -1,0 +1,289 @@
+/* FingerprintScanKotak.css */
+
+.fingerprint-scan-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.fingerprint-scan-card {
+  width: 100%;
+  max-width: 500px;
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 32px 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+}
+
+.fingerprint-scan-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.fingerprint-scan-header h2 {
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #003366;
+  margin: 0 0 6px 0;
+  line-height: 100%;
+}
+
+.fingerprint-scan-header h3 {
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  color: #64748B;
+  margin: 0;
+  line-height: 100%;
+}
+
+/* Scanner Area (Group outline) */
+.scanner-group-box {
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  background-color: #F8FAFC;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.sensor-viewfinder {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  background: #0F172A; /* Dark sensor background */
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Viewfinder Target Corners */
+.viewfinder-corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: #64748B;
+  border-style: solid;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.viewfinder-corner.top-left {
+  top: 25px;
+  left: 25px;
+  border-width: 2px 0 0 2px;
+}
+
+.viewfinder-corner.top-right {
+  top: 25px;
+  right: 25px;
+  border-width: 2px 2px 0 0;
+}
+
+.viewfinder-corner.bottom-left {
+  bottom: 25px;
+  left: 25px;
+  border-width: 0 0 2px 2px;
+}
+
+.viewfinder-corner.bottom-right {
+  bottom: 25px;
+  right: 25px;
+  border-width: 0 2px 2px 0;
+}
+
+/* Silhouette & States */
+.fingerprint-silhouette-container {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.fingerprint-silhouette {
+  width: 100%;
+  height: 100%;
+  transition: color 0.3s ease;
+}
+
+.fingerprint-silhouette-container.ready .fingerprint-silhouette {
+  color: #64748B;
+}
+
+.fingerprint-silhouette-container.scanning .fingerprint-silhouette {
+  color: #0091FF;
+  filter: drop-shadow(0 0 4px rgba(0, 145, 255, 0.5));
+}
+
+.fingerprint-silhouette-container.completed .fingerprint-silhouette {
+  color: #10B981;
+  filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.6));
+}
+
+/* Glowing Scanning Bar */
+.scanner-glow-bar {
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  height: 3px;
+  background: linear-gradient(90deg, rgba(0, 145, 255, 0) 0%, rgba(0, 145, 255, 1) 50%, rgba(0, 145, 255, 0) 100%);
+  box-shadow: 0 0 8px #0091FF, 0 0 12px #0091FF;
+  pointer-events: none;
+  z-index: 10;
+  animation: scanMotion 2s ease-in-out infinite;
+}
+
+@keyframes scanMotion {
+  0% { top: 15%; }
+  50% { top: 85%; }
+  100% { top: 15%; }
+}
+
+/* Success Badge Overlay */
+.scan-success-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #10B981;
+  color: #FFFFFF;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.animate-scale {
+  animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes scaleIn {
+  from { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+  to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+/* Feedback Area & Trigger button */
+.scan-feedback-area {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.scan-instructions {
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 300;
+  color: #64748B;
+  margin: 0 0 16px 0;
+  line-height: 1.4;
+}
+
+.start-scan-btn {
+  padding: 10px 24px;
+  background-color: #003366;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 20px;
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 51, 102, 0.15);
+}
+
+.start-scan-btn:hover {
+  background-color: #00529B;
+  transform: translateY(-1px);
+}
+
+/* Status Labels & Indicators */
+.scan-status-text {
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 10px 0;
+  line-height: 100%;
+}
+
+.scan-status-text.scanning {
+  color: #00529B;
+}
+
+.scan-status-text.completed {
+  color: #10B981;
+}
+
+.animate-pulse {
+  animation: pulseScanText 1s ease-in-out infinite;
+}
+
+@keyframes pulseScanText {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.progress-bar-container {
+  width: 80%;
+  height: 6px;
+  background-color: #E2E8F0;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: #0091FF;
+  width: 0;
+  transition: width 0.1s linear;
+}
+
+/* Submit Actions */
+.fingerprint-scan-submit-btn {
+  width: 100%;
+  height: 48px;
+  border: none;
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+.fingerprint-scan-submit-btn:disabled {
+  background-color: rgba(73, 124, 182, 1); /* Disabled steel blue */
+  cursor: not-allowed;
+}
+
+.fingerprint-scan-submit-btn:not(:disabled) {
+  background-color: rgba(0, 51, 102, 1); /* Active midnight blue */
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 51, 102, 0.15);
+}
+
+.fingerprint-scan-submit-btn:not(:disabled):hover {
+  background-color: #002244;
+}

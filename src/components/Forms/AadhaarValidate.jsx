@@ -10,8 +10,14 @@ const AadhaarValidate = ({ onFormSubmit, processVariables, readOnly }) => {
     ? `XXXXXXXX${processVariables.validateDetails.aadhaarNumber.slice(-4)}`
     : 'XXXXXXXX9945';
 
-  const [biometricConsent, setBiometricConsent] = useState(false);
-  const [biometricType, setBiometricType] = useState(''); // Empty initially to force selection
+  const [biometricConsent, setBiometricConsent] = useState(
+    processVariables?.aadhaarValidate?.biometricConsent !== undefined
+      ? processVariables.aadhaarValidate.biometricConsent
+      : (processVariables?.biometricConsent !== undefined ? processVariables.biometricConsent : false)
+  );
+  const [biometricType, setBiometricType] = useState(
+    processVariables?.aadhaarValidate?.biometricType || processVariables?.biometricType || ''
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = (e) => {
