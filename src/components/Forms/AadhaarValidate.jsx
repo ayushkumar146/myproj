@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './AadhaarValidate.css';
 
-const AadhaarValidate = ({ onFormSubmit, processVariables }) => {
+const AadhaarValidate = ({ onFormSubmit, processVariables, readOnly }) => {
   // Extract values dynamically from process variables or fallback to Figma mockup values
   const mobileNumber = processVariables?.validateDetails?.mobileNumberLinkedToAadhaar || '7432768509';
   const emailId = processVariables?.validateDetails?.emailId || 'Pabitra@Gmail.Com';
@@ -23,7 +23,11 @@ const AadhaarValidate = ({ onFormSubmit, processVariables }) => {
       aadhaarValidate: {
         biometricConsent,
         biometricType
-      }
+      },
+      biometricConsent,
+      biometricType,
+      fingerprintSelected: biometricType === 'fingerprint',
+      faceSelected: biometricType === 'face'
     };
     onFormSubmit(payload);
   };
@@ -31,7 +35,7 @@ const AadhaarValidate = ({ onFormSubmit, processVariables }) => {
   const isFormReady = biometricConsent && biometricType;
 
   return (
-    <div className="validate-form-container">
+    <div className={`validate-form-container ${readOnly ? 'backdrop-blur-view' : ''}`}>
       <div className="validate-card">
         <header className="validate-header">
           <h2>Validate</h2>

@@ -14,6 +14,7 @@ import LoginPage from './components/LoginPage';
 import ValidateSA from './components/Forms/ValidateSA';
 import OtpVerificationSA from './components/Forms/OtpVerificationSA';
 import AadhaarValidate from './components/Forms/AadhaarValidate';
+import AuthConsentKotak from './components/Forms/AuthConsentKotak';
 
 
 function App() {
@@ -248,12 +249,22 @@ function App() {
               processVariables={processVariables}
               onFormSubmit={handleFormSubmit}
             />
-          ) : formSchema?.formKey === 'aadhar_validate' ? (
-            <AadhaarValidate
-              key={currentTask.userTaskKey}
-              processVariables={processVariables}
-              onFormSubmit={handleFormSubmit}
-            />
+          ) : (formSchema?.formKey === 'aadhar_validate' || formSchema?.formKey === 'auth_consent_kotak') ? (
+            <>
+              <AadhaarValidate
+                key={formSchema?.formKey === 'aadhar_validate' ? currentTask.userTaskKey : 'aadhar-backdrop'}
+                processVariables={processVariables}
+                onFormSubmit={handleFormSubmit}
+                readOnly={formSchema?.formKey === 'auth_consent_kotak'}
+              />
+              {formSchema?.formKey === 'auth_consent_kotak' && (
+                <AuthConsentKotak
+                  key="auth-consent-modal"
+                  onFormSubmit={handleFormSubmit}
+                  onClose={() => setView('dashboard')}
+                />
+              )}
+            </>
           ) : (
             <div className="unsupported-form-view">
               <h2>Form Implementation Pending</h2>

@@ -1,0 +1,282 @@
+/* AuthConsentKotak.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(15, 23, 42, 0.6); /* Dimmed overlay */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000; /* Stacks above validate cards */
+  animation: fadeInConsentBackdrop 0.25s ease-out;
+  backdrop-filter: blur(2px);
+}
+
+@keyframes fadeInConsentBackdrop {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.consent-modal-card {
+  width: 90%;
+  max-width: 440px;
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  animation: slideUpConsentModal 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  font-family: 'Outfit', sans-serif;
+}
+
+@keyframes slideUpConsentModal {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  transition: transform 0.2s ease;
+  outline: none;
+}
+
+.modal-close-btn:hover {
+  transform: scale(1.1);
+}
+
+.modal-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #0F172A;
+  text-align: center;
+  margin: 0 0 20px 0;
+  line-height: 1.2;
+}
+
+/* Audio Player Section */
+.modal-audio-section {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.audio-section-title {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #475569;
+  margin: 0 0 8px 0;
+}
+
+.custom-audio-player {
+  background: #F1F5F9;
+  height: 40px;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  box-sizing: border-box;
+  gap: 10px;
+  width: 100%;
+}
+
+.audio-play-btn, .audio-volume-btn {
+  background: none;
+  border: none;
+  color: #475569;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  outline: none;
+  flex-shrink: 0;
+}
+
+.audio-play-btn:hover, .audio-volume-btn:hover {
+  color: #0F172A;
+}
+
+.audio-timer-display {
+  font-size: 0.775rem;
+  font-weight: 600;
+  color: #0F172A;
+  font-family: monospace;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.timer-total {
+  color: #64748B;
+}
+
+.audio-progress-bar-container {
+  flex: 1;
+  height: 4px;
+  background: #CBD5E1;
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.audio-progress-bar-fill {
+  height: 100%;
+  background: #00529B;
+  width: 0;
+  transition: width 0.1s linear;
+}
+
+.audio-lang-selector {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.lang-icon {
+  font-size: 0.85rem;
+}
+
+.lang-name {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.lang-arrow {
+  font-size: 0.65rem;
+  color: #64748B;
+}
+
+/* Consent Text & Checkbox Row */
+.modal-consent-text-row {
+  margin-bottom: 24px;
+  display: flex;
+}
+
+.modal-checkbox-label {
+  display: flex !important;
+  align-items: flex-start !important; /* Checkbox stays at the top line of text */
+  gap: 12px !important;
+  cursor: pointer;
+}
+
+/* Hide native checkbox */
+.hidden-checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+}
+
+/* Custom Checkbox Design */
+.checkbox-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-top: 2px; /* Slight alignment offset for the text */
+  flex-shrink: 0;
+}
+
+.checkbox-custom-box {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #00529B;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #FFFFFF;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  color: #FFFFFF;
+}
+
+.checkbox-custom-box.checked {
+  background-color: #00529B;
+  border-color: #00529B;
+}
+
+/* Scrollable legal consent text from Figma */
+.consent-scroll-text {
+  font-size: 0.775rem;
+  color: #334155;
+  line-height: 1.45;
+  text-align: left;
+  max-height: 180px;
+  overflow-y: auto;
+  padding-right: 6px;
+  box-sizing: border-box;
+}
+
+/* Scrollbar styling for consent legal text block */
+.consent-scroll-text::-webkit-scrollbar {
+  width: 4px;
+}
+
+.consent-scroll-text::-webkit-scrollbar-track {
+  background: #F1F5F9;
+  border-radius: 2px;
+}
+
+.consent-scroll-text::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 2px;
+}
+
+.consent-scroll-text::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* Proceed Button in modal */
+.modal-proceed-btn {
+  width: 100%;
+  height: 48px;
+  background: rgba(0, 51, 102, 1); /* Active color */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.modal-proceed-btn:hover:not(:disabled) {
+  background: #00529B;
+  box-shadow: 0 4px 12px rgba(0, 51, 102, 0.15);
+}
+
+.modal-proceed-btn:disabled {
+  background: rgba(73, 124, 182, 1); /* Disabled steel blue */
+  color: white;
+  cursor: not-allowed;
+  box-shadow: none;
+}

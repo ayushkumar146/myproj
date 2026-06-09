@@ -186,6 +186,18 @@ export const getFormSchema = async (accessToken, formKey) => {
     };
   }
 
+  if (formKey === 'auth_consent_kotak') {
+    console.log('Returning mock Auth consent schema directly for key:', formKey);
+    return {
+      form: {
+        id: "auth_consent_kotak",
+        type: "default",
+        components: []
+      },
+      processVariables: {}
+    };
+  }
+
   const url = `https://bank-enc-dec-kotakfiplatform.bharatkioskbanking.com/kotak/los/camunda/getFormSchema/${formKey}`;
   
   const headers = {
@@ -211,6 +223,10 @@ export const getFormSchema = async (accessToken, formKey) => {
         console.warn(`getFormSchema failed with status ${response.status}, falling back to mock Aadhaar Validate schema`);
         return { form: { id: "aadhar_validate", type: "default", components: [] }, processVariables: {} };
       }
+      if (formKey && (formKey.toLowerCase().includes('auth') || formKey.toLowerCase().includes('consent') || formKey === 'auth_consent_kotak')) {
+        console.warn(`getFormSchema failed with status ${response.status}, falling back to mock Auth Consent schema`);
+        return { form: { id: "auth_consent_kotak", type: "default", components: [] }, processVariables: {} };
+      }
       const errorText = await response.text();
       console.error(`getFormSchema failed with status ${response.status}:`, errorText);
       throw new Error(`Server returned ${response.status} for form schema request.`);
@@ -225,6 +241,10 @@ export const getFormSchema = async (accessToken, formKey) => {
     if (formKey && (formKey.toLowerCase().includes('aadhar') || formKey.toLowerCase().includes('validate') || formKey === 'aadhar_validate')) {
       console.warn(`getFormSchema encountered error: ${error.message}, falling back to mock Aadhaar Validate schema`);
       return { form: { id: "aadhar_validate", type: "default", components: [] }, processVariables: {} };
+    }
+    if (formKey && (formKey.toLowerCase().includes('auth') || formKey.toLowerCase().includes('consent') || formKey === 'auth_consent_kotak')) {
+      console.warn(`getFormSchema encountered error: ${error.message}, falling back to mock Auth Consent schema`);
+      return { form: { id: "auth_consent_kotak", type: "default", components: [] }, processVariables: {} };
     }
     throw error;
   }

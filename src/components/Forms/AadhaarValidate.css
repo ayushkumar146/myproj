@@ -157,3 +157,8 @@
   0% { transform: scale(0.5); opacity: 0; }
   100% { transform: scale(1); opacity: 1; }
 }
+
+.validate-form-container.backdrop-blur-view {
+  pointer-events: none;
+  opacity: 0.6;
+}
