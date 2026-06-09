@@ -19,6 +19,8 @@ import FaceScanKotak from './components/Forms/FaceScanKotak';
 import FingerprintScanKotak from './components/Forms/FingerprintScanKotak';
 import CustomerDetailsSA from './components/Forms/CustomerDetailsSA';
 import PersonalDetailsSA from './components/Forms/PersonalDetailsSA';
+import ProductSectionSA from './components/Forms/ProductSectionSA';
+import NomineeDetailsSA from './components/Forms/NomineeDetailsSA';
 
 
 function App() {
@@ -293,6 +295,18 @@ function App() {
             />
           ) : formSchema?.formKey === 'personal_details_sa' ? (
             <PersonalDetailsSA
+              key={currentTask.userTaskKey}
+              processVariables={processVariables}
+              onFormSubmit={handleFormSubmit}
+            />
+          ) : formSchema?.formKey === 'product_section_sa' ? (
+            <ProductSectionSA
+              key={currentTask.userTaskKey}
+              processVariables={processVariables}
+              onFormSubmit={handleFormSubmit}
+            />
+          ) : formSchema?.formKey === 'nominee_details_sa' ? (
+            <NomineeDetailsSA
               key={currentTask.userTaskKey}
               processVariables={processVariables}
               onFormSubmit={handleFormSubmit}

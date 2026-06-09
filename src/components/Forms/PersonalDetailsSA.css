@@ -97,7 +97,7 @@
 .pd-input {
   width: 100%;
   height: 54px;
-  padding: 16px;
+  padding: 0 16px;
   border: 1px solid rgba(204, 204, 204, 1);
   border-radius: 6px;
   font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
@@ -162,8 +162,6 @@
   align-items: center;
   gap: 8px;
   padding: 0 12px 0 0;
-  border: none;
-  border-radius: 0;
   cursor: pointer;
   font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
   font-size: 14px;

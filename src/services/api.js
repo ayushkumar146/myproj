@@ -280,6 +280,40 @@ export const getFormSchema = async (accessToken, formKey) => {
     };
   }
 
+  if (formKey === 'nominee_details_sa') {
+    console.log('Returning mock Nominee Details schema directly for key:', formKey);
+    return {
+      form: { id: 'nominee_details_sa', type: 'default', components: [] },
+      processVariables: {
+        nomineeDetails: {
+          nomineeList: [
+            {
+              title: '', name: '', dob: '', phNumber: '', emailId: '', select_k3yy5h: '', radio_nwsza: '', nomineePercentage: '100'
+            }
+          ],
+          fieldCount: '8'
+        }
+      }
+    };
+  }
+
+  if (formKey === 'product_section_sa') {
+    console.log('Returning mock Product Section schema directly for key:', formKey);
+    return {
+      form: { id: 'product_section_sa', type: 'default', components: [] },
+      processVariables: {
+        productSection: {
+          branch: '',
+          product: '',
+          debitCards: '',
+          promo: '',
+          cbcCode: '',
+          fieldCount: '5'
+        }
+      }
+    };
+  }
+
   if (formKey === 'personal_details_sa') {
     console.log('Returning mock Personal Details schema directly for key:', formKey);
     return {
@@ -410,6 +444,38 @@ export const getFormSchema = async (accessToken, formKey) => {
           processVariables: {}
         };
       }
+      if (formKey && (formKey.toLowerCase().includes('nominee') || formKey === 'nominee_details_sa')) {
+        console.warn(`getFormSchema encountered error/status, falling back to mock Nominee Details schema`);
+        return {
+          form: { id: 'nominee_details_sa', type: 'default', components: [] },
+          processVariables: {
+            nomineeDetails: {
+              nomineeList: [
+                {
+                  title: '', name: '', dob: '', phNumber: '', emailId: '', select_k3yy5h: '', radio_nwsza: '', nomineePercentage: '100'
+                }
+              ],
+              fieldCount: '8'
+            }
+          }
+        };
+      }
+      if (formKey && (formKey.toLowerCase().includes('product') || formKey === 'product_section_sa')) {
+        console.warn(`getFormSchema encountered error/status, falling back to mock Product Section schema`);
+        return {
+          form: { id: 'product_section_sa', type: 'default', components: [] },
+          processVariables: {
+            productSection: {
+              branch: '',
+              product: '',
+              debitCards: '',
+              promo: '',
+              cbcCode: '',
+              fieldCount: '5'
+            }
+          }
+        };
+      }
       if (formKey && (formKey.toLowerCase().includes('personal') || formKey === 'personal_details_sa')) {
         console.warn(`getFormSchema failed with status ${response.status}, falling back to mock Personal Details schema`);
         return {
@@ -499,6 +565,38 @@ export const getFormSchema = async (accessToken, formKey) => {
           id: "finger_print_kotak"
         },
         processVariables: {}
+      };
+    }
+    if (formKey && (formKey.toLowerCase().includes('nominee') || formKey === 'nominee_details_sa')) {
+      console.warn(`getFormSchema encountered error/status, falling back to mock Nominee Details schema`);
+      return {
+        form: { id: 'nominee_details_sa', type: 'default', components: [] },
+        processVariables: {
+          nomineeDetails: {
+            nomineeList: [
+              {
+                title: '', name: '', dob: '', phNumber: '', emailId: '', select_k3yy5h: '', radio_nwsza: '', nomineePercentage: '100'
+              }
+            ],
+            fieldCount: '8'
+          }
+        }
+      };
+    }
+    if (formKey && (formKey.toLowerCase().includes('product') || formKey === 'product_section_sa')) {
+      console.warn(`getFormSchema encountered error/status, falling back to mock Product Section schema`);
+      return {
+        form: { id: 'product_section_sa', type: 'default', components: [] },
+        processVariables: {
+          productSection: {
+            branch: '',
+            product: '',
+            debitCards: '',
+            promo: '',
+            cbcCode: '',
+            fieldCount: '5'
+          }
+        }
       };
     }
     if (formKey && (formKey.toLowerCase().includes('personal') || formKey === 'personal_details_sa')) {

@@ -1,0 +1,4 @@
+/* ProductSectionSA.css - inherits layout from PersonalDetailsSA */
+@import './PersonalDetailsSA.css';
+
+/* Any specific overrides for ProductSectionSA can go here */

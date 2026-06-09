@@ -1,0 +1,90 @@
+/* NomineeDetailsSA.css - inherits layout from PersonalDetailsSA */
+@import './PersonalDetailsSA.css';
+
+.nd-global-errors {
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid #EF4444;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+}
+
+.nd-global-error-msg {
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-size: 13px;
+  color: #EF4444;
+  margin: 0 0 4px 0;
+}
+
+.nd-global-error-msg:last-child {
+  margin-bottom: 0;
+}
+
+.nd-nominee-block {
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+}
+
+.nd-block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.nd-block-header h3 {
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: rgba(11, 77, 136, 1);
+  margin: 0;
+}
+
+.nd-remove-btn {
+  background: transparent;
+  border: none;
+  color: #EF4444;
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.nd-remove-btn:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+.nd-add-btn {
+  align-self: flex-end;
+  height: 40px;
+  padding: 0 24px;
+  border: 1px solid #00529B;
+  border-radius: 9999px; /* pill shape */
+  background-color: #FFFFFF;
+  color: #00529B;
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+}
+
+.nd-add-btn:hover {
+  background-color: rgba(0, 82, 155, 0.05);
+}
