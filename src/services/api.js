@@ -280,6 +280,40 @@ export const getFormSchema = async (accessToken, formKey) => {
     };
   }
 
+  if (formKey === 'declaration_sa') {
+    console.log('Returning mock Declaration schema directly for key:', formKey);
+    return {
+      form: { id: 'declaration_sa', type: 'default', components: [] },
+      processVariables: {
+        declaration: {
+          checkbox_3q039w: false,
+          checkbox_rlsaoa: false,
+          checkbox_ykmhve: false,
+          checkbox_7fgjrm: false,
+          checkbox_fne9f: false,
+          checkbox_j4c184: false,
+          checkbox_y11xwl: false,
+          checkbox_ysqcqs: false,
+          checkbox_qtcw2a: false,
+          checkbox_3nhy8h: false,
+          checkbox_qykwt: false,
+          customerSign: '',
+          name: '',
+          date: '',
+          isAepsEnabled: '',
+          checkbox_ocuok9: false,
+          checkbox_ccsm8o: false,
+          checkbox_9luyp9: false,
+          checkbox_z821t2: false,
+          checkbox_pnvizw: false,
+          checkbox_jyva4: false,
+          checkbox_8k3lwn: false,
+          fieldCount: '10'
+        }
+      }
+    };
+  }
+
   if (formKey === 'nominee_details_sa') {
     console.log('Returning mock Nominee Details schema directly for key:', formKey);
     return {
@@ -444,6 +478,39 @@ export const getFormSchema = async (accessToken, formKey) => {
           processVariables: {}
         };
       }
+      if (formKey && (formKey.toLowerCase().includes('declaration') || formKey === 'declaration_sa')) {
+        console.warn(`getFormSchema encountered error/status, falling back to mock Declaration schema`);
+        return {
+          form: { id: 'declaration_sa', type: 'default', components: [] },
+          processVariables: {
+            declaration: {
+              checkbox_3q039w: false,
+              checkbox_rlsaoa: false,
+              checkbox_ykmhve: false,
+              checkbox_7fgjrm: false,
+              checkbox_fne9f: false,
+              checkbox_j4c184: false,
+              checkbox_y11xwl: false,
+              checkbox_ysqcqs: false,
+              checkbox_qtcw2a: false,
+              checkbox_3nhy8h: false,
+              checkbox_qykwt: false,
+              customerSign: '',
+              name: '',
+              date: '',
+              isAepsEnabled: '',
+              checkbox_ocuok9: false,
+              checkbox_ccsm8o: false,
+              checkbox_9luyp9: false,
+              checkbox_z821t2: false,
+              checkbox_pnvizw: false,
+              checkbox_jyva4: false,
+              checkbox_8k3lwn: false,
+              fieldCount: '10'
+            }
+          }
+        };
+      }
       if (formKey && (formKey.toLowerCase().includes('nominee') || formKey === 'nominee_details_sa')) {
         console.warn(`getFormSchema encountered error/status, falling back to mock Nominee Details schema`);
         return {
@@ -565,6 +632,39 @@ export const getFormSchema = async (accessToken, formKey) => {
           id: "finger_print_kotak"
         },
         processVariables: {}
+      };
+    }
+    if (formKey && (formKey.toLowerCase().includes('declaration') || formKey === 'declaration_sa')) {
+      console.warn(`getFormSchema encountered error/status, falling back to mock Declaration schema`);
+      return {
+        form: { id: 'declaration_sa', type: 'default', components: [] },
+        processVariables: {
+          declaration: {
+            checkbox_3q039w: false,
+            checkbox_rlsaoa: false,
+            checkbox_ykmhve: false,
+            checkbox_7fgjrm: false,
+            checkbox_fne9f: false,
+            checkbox_j4c184: false,
+            checkbox_y11xwl: false,
+            checkbox_ysqcqs: false,
+            checkbox_qtcw2a: false,
+            checkbox_3nhy8h: false,
+            checkbox_qykwt: false,
+            customerSign: '',
+            name: '',
+            date: '',
+            isAepsEnabled: '',
+            checkbox_ocuok9: false,
+            checkbox_ccsm8o: false,
+            checkbox_9luyp9: false,
+            checkbox_z821t2: false,
+            checkbox_pnvizw: false,
+            checkbox_jyva4: false,
+            checkbox_8k3lwn: false,
+            fieldCount: '10'
+          }
+        }
       };
     }
     if (formKey && (formKey.toLowerCase().includes('nominee') || formKey === 'nominee_details_sa')) {

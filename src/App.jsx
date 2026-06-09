@@ -21,6 +21,7 @@ import CustomerDetailsSA from './components/Forms/CustomerDetailsSA';
 import PersonalDetailsSA from './components/Forms/PersonalDetailsSA';
 import ProductSectionSA from './components/Forms/ProductSectionSA';
 import NomineeDetailsSA from './components/Forms/NomineeDetailsSA';
+import DeclarationSA from './components/Forms/DeclarationSA';
 
 
 function App() {
@@ -307,6 +308,12 @@ function App() {
             />
           ) : formSchema?.formKey === 'nominee_details_sa' ? (
             <NomineeDetailsSA
+              key={currentTask.userTaskKey}
+              processVariables={processVariables}
+              onFormSubmit={handleFormSubmit}
+            />
+          ) : formSchema?.formKey === 'declaration_sa' ? (
+            <DeclarationSA
               key={currentTask.userTaskKey}
               processVariables={processVariables}
               onFormSubmit={handleFormSubmit}

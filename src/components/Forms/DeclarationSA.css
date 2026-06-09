@@ -1,0 +1,140 @@
+/* DeclarationSA.css - inherits layout from PersonalDetailsSA */
+@import './PersonalDetailsSA.css';
+
+.dec-card {
+  max-width: 600px;
+}
+
+.dec-header {
+  margin-bottom: 24px;
+}
+
+.dec-form {
+  gap: 20px;
+}
+
+.dec-divider {
+  border: none;
+  border-top: 1px solid #E2E8F0;
+  margin: 4px 0;
+}
+
+.dec-checkbox-group {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.dec-checkbox {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  flex-shrink: 0;
+  accent-color: #00529B;
+  cursor: pointer;
+}
+
+.dec-checkbox-error {
+  outline: 2px solid #EF4444;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.dec-text {
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 27px;
+  letter-spacing: 0%;
+  color: rgba(0, 0, 0, 1);
+  text-transform: capitalize;
+}
+
+.dec-text p {
+  margin: 4px 0 0 0;
+}
+
+.dec-text strong {
+  color: #0F172A;
+  font-weight: 600;
+}
+
+.dec-text ul {
+  margin-top: 8px;
+  margin-bottom: 0;
+  padding-left: 20px;
+}
+
+.dec-text li {
+  margin-bottom: 4px;
+}
+
+.dec-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dec-section strong {
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-size: 15px;
+  color: #0F172A;
+}
+
+.dec-subtitle {
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-size: 13px;
+  color: #64748B;
+  margin-top: -8px;
+}
+
+.dec-inline-checkboxes {
+  display: flex;
+  gap: 24px;
+  margin: 4px 0;
+}
+
+.dec-inline-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 27px;
+  color: rgba(0, 0, 0, 1);
+  text-transform: capitalize;
+  cursor: pointer;
+}
+
+.dec-note {
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 27px;
+  color: rgba(0, 0, 0, 1);
+  text-transform: capitalize;
+  margin: 4px 0 0 0;
+}
+
+.dec-terms-box {
+  border: 1px solid rgba(235, 235, 236, 1);
+  padding: 24px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.dec-terms-box .dec-text,
+.dec-terms-box .dec-text p,
+.dec-terms-box .dec-text a {
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-transform: capitalize;
+  color: rgba(0, 0, 0, 1);
+}
