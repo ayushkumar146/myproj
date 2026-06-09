@@ -195,21 +195,11 @@ const OtpVerificationSA = ({ onFormSubmit, processVariables, onBack }) => {
     <div className="otp-form-container">
       <div className="otp-card">
         
-        {/* Back Button */}
-        {onBack && (
-          <button type="button" className="back-arrow-btn" onClick={onBack} aria-label="Go back">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#003366" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="19" y1="12" x2="5" y2="12"></line>
-              <polyline points="12 19 5 12 12 5"></polyline>
-            </svg>
-          </button>
-        )}
-
         {/* Card Header */}
         <header className="otp-header">
           <h2>Validate</h2>
-          <h3>OTP Verification</h3>
-          <p>Please enter the OTP details sent to your registered contact information to proceed.</p>
+          {/* <h3>OTP Verification</h3> */}
+          {/* <p>Please enter the OTP details sent to your registered contact information to proceed.</p> */}
         </header>
 
         <form onSubmit={handleSubmit} className="otp-form-content">

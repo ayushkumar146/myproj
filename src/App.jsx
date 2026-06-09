@@ -246,7 +246,6 @@ function App() {
               key={currentTask.userTaskKey}
               processVariables={processVariables}
               onFormSubmit={handleFormSubmit}
-              onBack={() => setView('dashboard')}
             />
           ) : (
             <div className="unsupported-form-view">
