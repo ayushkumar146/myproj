@@ -18,6 +18,7 @@ import AuthConsentKotak from './components/Forms/AuthConsentKotak';
 import FaceScanKotak from './components/Forms/FaceScanKotak';
 import FingerprintScanKotak from './components/Forms/FingerprintScanKotak';
 import CustomerDetailsSA from './components/Forms/CustomerDetailsSA';
+import PersonalDetailsSA from './components/Forms/PersonalDetailsSA';
 
 
 function App() {
@@ -286,6 +287,12 @@ function App() {
             />
           ) : formSchema?.formKey === 'customer_details_sa' ? (
             <CustomerDetailsSA
+              key={currentTask.userTaskKey}
+              processVariables={processVariables}
+              onFormSubmit={handleFormSubmit}
+            />
+          ) : formSchema?.formKey === 'personal_details_sa' ? (
+            <PersonalDetailsSA
               key={currentTask.userTaskKey}
               processVariables={processVariables}
               onFormSubmit={handleFormSubmit}

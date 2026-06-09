@@ -280,6 +280,27 @@ export const getFormSchema = async (accessToken, formKey) => {
     };
   }
 
+  if (formKey === 'personal_details_sa') {
+    console.log('Returning mock Personal Details schema directly for key:', formKey);
+    return {
+      form: { id: 'personal_details_sa', type: 'default', components: [] },
+      processVariables: {
+        personalDetails: {
+          name: '',
+          motherMaidanName: '',
+          motherMaidanNameCnf: '',
+          fatherName: '',
+          maritalStatus: '',
+          annualIncome: '',
+          occupation: '',
+          incomeSource: '',
+          riskCategory: 'LOW',
+          fieldCount: '9'
+        }
+      }
+    };
+  }
+
   if (formKey === 'customer_details_sa') {
     console.log('Returning mock Customer Details schema directly for key:', formKey);
     return {
@@ -389,6 +410,26 @@ export const getFormSchema = async (accessToken, formKey) => {
           processVariables: {}
         };
       }
+      if (formKey && (formKey.toLowerCase().includes('personal') || formKey === 'personal_details_sa')) {
+        console.warn(`getFormSchema failed with status ${response.status}, falling back to mock Personal Details schema`);
+        return {
+          form: { id: 'personal_details_sa', type: 'default', components: [] },
+          processVariables: {
+            personalDetails: {
+              name: '',
+              motherMaidanName: '',
+              motherMaidanNameCnf: '',
+              fatherName: '',
+              maritalStatus: '',
+              annualIncome: '',
+              occupation: '',
+              incomeSource: '',
+              riskCategory: 'LOW',
+              fieldCount: '9'
+            }
+          }
+        };
+      }
       if (formKey && (formKey.toLowerCase().includes('customer') || formKey.toLowerCase().includes('details') || formKey === 'customer_details_sa')) {
         console.warn(`getFormSchema failed with status ${response.status}, falling back to mock Customer Details schema`);
         return {
@@ -458,6 +499,26 @@ export const getFormSchema = async (accessToken, formKey) => {
           id: "finger_print_kotak"
         },
         processVariables: {}
+      };
+    }
+    if (formKey && (formKey.toLowerCase().includes('personal') || formKey === 'personal_details_sa')) {
+      console.warn(`getFormSchema encountered error: ${error.message}, falling back to mock Personal Details schema`);
+      return {
+        form: { id: 'personal_details_sa', type: 'default', components: [] },
+        processVariables: {
+          personalDetails: {
+            name: '',
+            motherMaidanName: '',
+            motherMaidanNameCnf: '',
+            fatherName: '',
+            maritalStatus: '',
+            annualIncome: '',
+            occupation: '',
+            incomeSource: '',
+            riskCategory: 'LOW',
+            fieldCount: '9'
+          }
+        }
       };
     }
     if (formKey && (formKey.toLowerCase().includes('customer') || formKey.toLowerCase().includes('details') || formKey === 'customer_details_sa')) {
