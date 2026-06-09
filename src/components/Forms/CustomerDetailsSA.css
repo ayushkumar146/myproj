@@ -24,11 +24,13 @@
 
 .customer-details-header h2 {
   font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
-  font-size: 24px;
-  font-weight: 600;
-  color: #003366;
-  margin: 0 0 6px 0;
+  font-weight: 700;
+  font-size: 22px;
   line-height: 100%;
+  letter-spacing: 0%;
+  text-align: center;
+  color: rgba(0, 0, 0, 1);
+  margin: 0 0 6px 0;
 }
 
 .customer-details-header h3 {
@@ -46,12 +48,29 @@
   gap: 20px;
 }
 
-/* Aadhaar Card Render Block */
-.aadhaar-info-block {
+/* Outer bordered box wrapping profile + checkbox + comm address fields */
+.form-content-bordered {
   border: 1px solid #E2E8F0;
   border-radius: 12px;
-  padding: 24px;
-  background-color: #FFFFFF;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-sizing: border-box;
+}
+
+/* Subtle divider between profile block and checkbox */
+.form-section-divider {
+  height: 1px;
+  background-color: #E2E8F0;
+  margin: 0 -20px; /* bleed to edges of the bordered box */
+}
+
+/* Aadhaar Card Render Block — no own border, sits inside .form-content-bordered */
+.aadhaar-info-block {
+  border-radius: 0;
+  padding: 0;
+  background-color: transparent;
   box-sizing: border-box;
 }
 
@@ -195,8 +214,6 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  border-top: 1px solid #E2E8F0;
-  padding-top: 18px;
 }
 
 .fields-section-title {

@@ -2,16 +2,15 @@ import React, { useState, useEffect } from 'react';
 import './CustomerDetailsSA.css';
 
 const CustomerDetailsSA = ({ onFormSubmit, processVariables }) => {
-  // Helper to find a value inside processVariables (resolves flat paths, nested paths, and falls back case-insensitively)
+  // Helper to find a value inside processVariables (flat key, nested path, or recursive fallback)
   const getProcessVar = (path, defaultValue = '') => {
     if (!processVariables) return defaultValue;
 
-    // 1. Check as flat key (e.g., processVariables["customerDetails.name"])
-    if (processVariables[path] !== undefined && processVariables[path] !== null) {
+    // 1. Flat key
+    if (processVariables[path] !== undefined && processVariables[path] !== null)
       return processVariables[path];
-    }
 
-    // 2. Check as nested path (e.g., processVariables.customerDetails.name)
+    // 2. Nested path (e.g. processVariables.customerDetails.name)
     const parts = path.split('.');
     let current = processVariables;
     let foundNested = true;
@@ -23,21 +22,16 @@ const CustomerDetailsSA = ({ onFormSubmit, processVariables }) => {
         break;
       }
     }
-    if (foundNested) {
-      return current;
-    }
+    if (foundNested) return current;
 
-    // 3. Fallback: Search case-insensitively for flat key or leaf key
+    // 3. Recursive case-insensitive search on leaf key
     const leafKey = parts[parts.length - 1];
     const recursiveFind = (obj, targetKey) => {
       if (!obj || typeof obj !== 'object') return undefined;
       const lowerKey = targetKey.toLowerCase();
-      
       const foundKey = Object.keys(obj).find(k => k.toLowerCase() === lowerKey);
-      if (foundKey !== undefined && obj[foundKey] !== undefined && obj[foundKey] !== null) {
+      if (foundKey !== undefined && obj[foundKey] !== undefined && obj[foundKey] !== null)
         return obj[foundKey];
-      }
-      
       for (const k in obj) {
         if (typeof obj[k] === 'object' && obj[k] !== null) {
           const val = recursiveFind(obj[k], targetKey);
@@ -46,17 +40,16 @@ const CustomerDetailsSA = ({ onFormSubmit, processVariables }) => {
       }
       return undefined;
     };
-
     const val = recursiveFind(processVariables, leafKey);
     return val !== undefined ? val : defaultValue;
   };
 
-  // Log processVariables for debugging
+  // Debug log
   useEffect(() => {
-    console.log("CustomerDetailsSA received processVariables:", processVariables);
+    console.log('CustomerDetailsSA processVariables:', processVariables);
   }, [processVariables]);
 
-  // Display fields — re-computed on every render from processVariables
+  // Display fields — re-computed on every render
   const name        = getProcessVar('customerDetails.name')        || getProcessVar('customer.name') || getProcessVar('name');
   const age         = getProcessVar('customerDetails.age')         || getProcessVar('age');
   const gender      = getProcessVar('customerDetails.gender')      || getProcessVar('gender');
@@ -66,30 +59,28 @@ const CustomerDetailsSA = ({ onFormSubmit, processVariables }) => {
   const pincode     = getProcessVar('customerDetails.pincode')     || getProcessVar('pincode');
   const state       = getProcessVar('customerDetails.state')       || getProcessVar('state');
 
-  // ── Compute initial values synchronously from processVariables ──────────────
-  // React only uses these on first render. The component remounts fresh each
-  // time the form changes (App.jsx nulls formSchema first), so this is safe.
-  const _rawSame    = getProcessVar('customerDetails.isCommunicationAddressSame') || getProcessVar('isCommunicationAddressSame');
-  const _initSame   = _rawSame !== '' ? (_rawSame === true || _rawSame === 'true') : true;
+  // ── Compute initial values synchronously (safe — component remounts fresh each form load) ──
+  const _rawSame     = getProcessVar('customerDetails.isCommunicationAddressSame') || getProcessVar('isCommunicationAddressSame');
+  const _initSame    = _rawSame !== '' ? (_rawSame === true || _rawSame === 'true') : true;
 
-  const _camZip     = getProcessVar('customerDetails.commZipcode')     || getProcessVar('commZipcode')     || '';
-  const _camCity    = getProcessVar('customerDetails.commCity')         || getProcessVar('commCity')         || '';
-  const _camState   = getProcessVar('customerDetails.commState')        || getProcessVar('commState')        || '';
-  const _camLine1   = getProcessVar('customerDetails.commAddrLine1')    || getProcessVar('commAddrLine1')    || '';
-  const _camLine2   = getProcessVar('customerDetails.commAddrLine2')    || getProcessVar('commAddrLine2')    || '';
-  const _camLine3   = getProcessVar('customerDetails.commAddrLine3')    || getProcessVar('commAddrLine3')    || '';
-  const _camLandmark= getProcessVar('customerDetails.CommAddrLandmark') || getProcessVar('customerDetails.commAddrLandmark') || getProcessVar('CommAddrLandmark') || getProcessVar('commAddrLandmark') || '';
+  const _camZip      = getProcessVar('customerDetails.commZipcode')     || getProcessVar('commZipcode')     || '';
+  const _camCity     = getProcessVar('customerDetails.commCity')         || getProcessVar('commCity')         || '';
+  const _camState    = getProcessVar('customerDetails.commState')        || getProcessVar('commState')        || '';
+  const _camLine1    = getProcessVar('customerDetails.commAddrLine1')    || getProcessVar('commAddrLine1')    || '';
+  const _camLine2    = getProcessVar('customerDetails.commAddrLine2')    || getProcessVar('commAddrLine2')    || '';
+  const _camLine3    = getProcessVar('customerDetails.commAddrLine3')    || getProcessVar('commAddrLine3')    || '';
+  const _camLandmark = getProcessVar('customerDetails.CommAddrLandmark') || getProcessVar('customerDetails.commAddrLandmark') || getProcessVar('CommAddrLandmark') || getProcessVar('commAddrLandmark') || '';
 
-  // When isCommunicationAddressSame=true and comm fields are empty, fall back to Aadhaar address
-  const _initZip    = _initSame ? (_camZip    || getProcessVar('customerDetails.pincode')    || getProcessVar('pincode')    || '') : _camZip;
-  const _initCity   = _initSame ? (_camCity   || getProcessVar('customerDetails.city')       || getProcessVar('city')       || '') : _camCity;
-  const _initState  = _initSame ? (_camState  || getProcessVar('customerDetails.state')      || getProcessVar('state')      || '') : _camState;
-  const _initLine1  = _initSame ? (_camLine1  || getProcessVar('customerDetails.addressLine')|| getProcessVar('addressLine')|| '') : _camLine1;
-  const _initLine2  = _initSame ? (_camLine2  || getProcessVar('customerDetails.addressLine')|| getProcessVar('addressLine')|| '') : _camLine2;
-  const _initLine3  = _initSame ? (_camLine3  || getProcessVar('customerDetails.addressLine')|| getProcessVar('addressLine')|| '') : _camLine3;
-  // ────────────────────────────────────────────────────────────────────────────
+  // When isSame=true and Camunda comm fields are empty, fall back to Aadhaar address
+  const _initZip   = _initSame ? (_camZip   || getProcessVar('customerDetails.pincode')     || getProcessVar('pincode')     || '') : _camZip;
+  const _initCity  = _initSame ? (_camCity  || getProcessVar('customerDetails.city')        || getProcessVar('city')        || '') : _camCity;
+  const _initState = _initSame ? (_camState || getProcessVar('customerDetails.state')       || getProcessVar('state')       || '') : _camState;
+  const _initLine1 = _initSame ? (_camLine1 || getProcessVar('customerDetails.addressLine') || getProcessVar('addressLine') || '') : _camLine1;
+  const _initLine2 = _initSame ? (_camLine2 || getProcessVar('customerDetails.addressLine') || getProcessVar('addressLine') || '') : _camLine2;
+  const _initLine3 = _initSame ? (_camLine3 || getProcessVar('customerDetails.addressLine') || getProcessVar('addressLine') || '') : _camLine3;
+  // ─────────────────────────────────────────────────────────────────────────────
 
-  // Editable state — initialised from Camunda values computed above
+  // Editable state — initialised from Camunda values above
   const [isCommunicationAddressSame, setIsCommunicationAddressSame] = useState(_initSame);
   const [commZipcode,      setCommZipcode]      = useState(_initZip);
   const [commCity,         setCommCity]          = useState(_initCity);
@@ -102,12 +93,11 @@ const CustomerDetailsSA = ({ onFormSubmit, processVariables }) => {
 
   // Address pattern validator
   const addressPattern = /^(?=.*[A-Za-z0-9])[A-Za-z0-9,().\-:@#_={}| ]+$/;
-  const addressPatternMessage = "Address must contain letters/numbers and only , ( ) . - : @ # _ = { } | special characters.";
+  const addressPatternMessage = 'Address must contain letters/numbers and only , ( ) . - : @ # _ = { } | special characters.';
 
-  // Validation errors — derived directly during render via useMemo (no useState/useEffect needed)
+  // Validation errors — pure derived value, no useState/useEffect
   const errors = React.useMemo(() => {
     if (!isCommunicationAddressSame) return {};
-
     const e = {};
 
     if (!commZipcode)
@@ -146,37 +136,25 @@ const CustomerDetailsSA = ({ onFormSubmit, processVariables }) => {
       e.commAddrLandmark = 'Communication Addr Landmark is required';
 
     return e;
-  }, [
-    isCommunicationAddressSame,
-    commZipcode, commCity, commState,
-    commAddrLine1, commAddrLine2, commAddrLine3, commAddrLandmark
-  ]);
+  }, [isCommunicationAddressSame, commZipcode, commCity, commState, commAddrLine1, commAddrLine2, commAddrLine3, commAddrLandmark]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Validate again before submit if fields are shown
-    if (isCommunicationAddressSame && Object.keys(errors).length > 0) {
-      return;
-    }
-
+    if (isCommunicationAddressSame && Object.keys(errors).length > 0) return;
     setIsSubmitting(true);
 
     const payload = {
       customerDetails: {
         isCommunicationAddressSame,
-        fieldCount: "8",
+        fieldCount: '8',
         ...(isCommunicationAddressSame ? {
-          commZipcode,
-          commCity,
-          commState,
-          commAddrLine1,
-          commAddrLine2,
-          commAddrLine3,
+          commZipcode, commCity, commState,
+          commAddrLine1, commAddrLine2, commAddrLine3,
           CommAddrLandmark: commAddrLandmark
         } : {})
       },
       isCommunicationAddressSame,
-      fieldCount: "8"
+      fieldCount: '8'
     };
 
     onFormSubmit(payload);
@@ -189,193 +167,191 @@ const CustomerDetailsSA = ({ onFormSubmit, processVariables }) => {
       <div className="customer-details-card">
         <header className="customer-details-header">
           <h2>Customer Details</h2>
-          <h3>Verify Profile & Address Information</h3>
+          {/* <h3>Verify Profile &amp; Address Information</h3> */}
         </header>
 
         <form onSubmit={handleSubmit} className="customer-details-form">
-          
-          {/* Aadhaar Info Card representation of HTML component */}
-          <div className="aadhaar-info-block">
-            <div className="avatar-section">
-              <div className="avatar-circle">
-                <span className="avatar-emoji">😊</span>
-              </div>
-              <h4 className="customer-name">{name}</h4>
-            </div>
 
-            <div className="info-details-box">
-              <div className="info-row">
-                <span className="info-icon">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="7" r="4"></circle>
-                    <path d="M5.5 21a8.5 8.5 0 0 1 13 0"></path>
-                  </svg>
-                </span>
-                <span className="info-value">{age}, {gender}</span>
+          {/* ── Outer bordered box: profile + checkbox + comm address ── */}
+          <div className="form-content-bordered">
+
+            {/* Profile / Aadhaar Info */}
+            <div className="aadhaar-info-block">
+              <div className="avatar-section">
+                <div className="avatar-circle">
+                  <span className="avatar-emoji">😊</span>
+                </div>
+                <h4 className="customer-name">{name}</h4>
               </div>
 
-              <div className="info-row">
-                <span className="info-icon">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="3" y="4" width="18" height="18" rx="2"></rect>
-                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                  </svg>
-                </span>
-                <span className="info-value">{dob}</span>
-              </div>
-
-              <div className="info-row align-start">
-                <span className="info-icon mt-2">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="5" y="3" width="16" height="18" rx="3"></rect>
-                    <line x1="3" y1="7" x2="5" y2="7"></line>
-                    <line x1="3" y1="12" x2="5" y2="12"></line>
-                    <line x1="3" y1="17" x2="5" y2="17"></line>
-                    <circle cx="13" cy="10" r="2"></circle>
-                    <path d="M10 15h6"></path>
-                  </svg>
-                </span>
-                <span className="info-value line-15">
-                  {addressLine}, {city}, {pincode},<br />
-                  {state}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Same Address Checkbox */}
-          <div className="form-group checkbox-group">
-            <label className="checkbox-label">
-              <span className="checkbox-wrapper">
-                <input
-                  type="checkbox"
-                  checked={isCommunicationAddressSame}
-                  onChange={(e) => setIsCommunicationAddressSame(e.target.checked)}
-                  className="hidden-checkbox"
-                />
-                <span className={`checkbox-custom-box ${isCommunicationAddressSame ? 'checked' : ''}`}>
-                  {isCommunicationAddressSame && (
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="20 6 9 17 4 12"></polyline>
+              <div className="info-details-box">
+                <div className="info-row">
+                  <span className="info-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="7" r="4"></circle>
+                      <path d="M5.5 21a8.5 8.5 0 0 1 13 0"></path>
                     </svg>
-                  )}
-                </span>
-              </span>
-              <span className="checkbox-text font-14">Communication Address Is Same As Aadhaar Address.</span>
-            </label>
-          </div>
+                  </span>
+                  <span className="info-value">{age}, {gender}</span>
+                </div>
 
-          {/* Conditional Communication Address Inputs */}
-          {isCommunicationAddressSame && (
-            <div className="communication-address-fields animate-fade-down">
-              <h4 className="fields-section-title">Communication Address</h4>
-              
-              {/* Zipcode */}
-              <div className="form-group">
-                <label className="input-label">Communication  Zipcode <span className="req-star">*</span></label>
-                <input
-                  type="text"
-                  maxLength="6"
-                  value={commZipcode}
-                  onChange={(e) => setCommZipcode(e.target.value.replace(/\D/g, ''))}
-                  placeholder="Enter 6-digit zipcode"
-                  readOnly={isCommunicationAddressSame}
-                  className={`form-input-field ${errors.commZipcode ? 'error-border' : ''}`}
-                />
-                {errors.commZipcode && <span className="error-text-message">{errors.commZipcode}</span>}
-              </div>
+                <div className="info-row">
+                  <span className="info-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+                      <line x1="16" y1="2" x2="16" y2="6"></line>
+                      <line x1="8" y1="2" x2="8" y2="6"></line>
+                      <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                  </span>
+                  <span className="info-value">{dob}</span>
+                </div>
 
-              {/* City */}
-              <div className="form-group">
-                <label className="input-label">Communication City <span className="req-star">*</span></label>
-                <input
-                  type="text"
-                  value={commCity}
-                  onChange={(e) => setCommCity(e.target.value)}
-                  placeholder="Enter city"
-                  readOnly={isCommunicationAddressSame}
-                  className={`form-input-field ${errors.commCity ? 'error-border' : ''}`}
-                />
-                {errors.commCity && <span className="error-text-message">{errors.commCity}</span>}
-              </div>
-
-              {/* State */}
-              <div className="form-group">
-                <label className="input-label">Communication State <span className="req-star">*</span></label>
-                <input
-                  type="text"
-                  value={commState}
-                  onChange={(e) => setCommState(e.target.value)}
-                  placeholder="Enter state"
-                  readOnly={isCommunicationAddressSame}
-                  className={`form-input-field ${errors.commState ? 'error-border' : ''}`}
-                />
-                {errors.commState && <span className="error-text-message">{errors.commState}</span>}
-              </div>
-
-              {/* Addr Line 1 */}
-              <div className="form-group">
-                <label className="input-label">Communication Addr Line1 <span className="req-star">*</span></label>
-                <input
-                  type="text"
-                  maxLength="30"
-                  value={commAddrLine1}
-                  onChange={(e) => setCommAddrLine1(e.target.value)}
-                  placeholder="Street, Plot No., Building"
-                  readOnly={isCommunicationAddressSame}
-                  className={`form-input-field ${errors.commAddrLine1 ? 'error-border' : ''}`}
-                />
-                {errors.commAddrLine1 && <span className="error-text-message">{errors.commAddrLine1}</span>}
-              </div>
-
-              {/* Addr Line 2 */}
-              <div className="form-group">
-                <label className="input-label">Communication Addr Line2</label>
-                <input
-                  type="text"
-                  maxLength="30"
-                  value={commAddrLine2}
-                  onChange={(e) => setCommAddrLine2(e.target.value)}
-                  placeholder="Locality, Sector"
-                  readOnly={isCommunicationAddressSame}
-                  className={`form-input-field ${errors.commAddrLine2 ? 'error-border' : ''}`}
-                />
-                {errors.commAddrLine2 && <span className="error-text-message">{errors.commAddrLine2}</span>}
-              </div>
-
-              {/* Addr Line 3 */}
-              <div className="form-group">
-                <label className="input-label">Communication Addr Line3</label>
-                <input
-                  type="text"
-                  maxLength="30"
-                  value={commAddrLine3}
-                  onChange={(e) => setCommAddrLine3(e.target.value)}
-                  placeholder="Additional details"
-                  readOnly={isCommunicationAddressSame}
-                  className={`form-input-field ${errors.commAddrLine3 ? 'error-border' : ''}`}
-                />
-                {errors.commAddrLine3 && <span className="error-text-message">{errors.commAddrLine3}</span>}
-              </div>
-
-              {/* Addr Landmark */}
-              <div className="form-group">
-                <label className="input-label">Communication Addr Landmark <span className="req-star">*</span></label>
-                <textarea
-                  value={commAddrLandmark}
-                  onChange={(e) => setCommAddrLandmark(e.target.value)}
-                  placeholder="Nearby landmark"
-                  readOnly={isCommunicationAddressSame}
-                  className={`form-input-field ${errors.commAddrLandmark ? 'error-border' : ''}`}
-                />
-                {errors.commAddrLandmark && <span className="error-text-message">{errors.commAddrLandmark}</span>}
+                <div className="info-row align-start">
+                  <span className="info-icon mt-2">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="5" y="3" width="16" height="18" rx="3"></rect>
+                      <line x1="3" y1="7" x2="5" y2="7"></line>
+                      <line x1="3" y1="12" x2="5" y2="12"></line>
+                      <line x1="3" y1="17" x2="5" y2="17"></line>
+                      <circle cx="13" cy="10" r="2"></circle>
+                      <path d="M10 15h6"></path>
+                    </svg>
+                  </span>
+                  <span className="info-value line-15">
+                    {addressLine}, {city}, {pincode},<br />
+                    {state}
+                  </span>
+                </div>
               </div>
             </div>
-          )}
 
-          {/* Submit Button (Next) */}
+            {/* Divider */}
+            <div className="form-section-divider" />
+
+            {/* Same Address Checkbox */}
+            <div className="form-group checkbox-group">
+              <label className="checkbox-label">
+                <span className="checkbox-wrapper">
+                  <input
+                    type="checkbox"
+                    checked={isCommunicationAddressSame}
+                    onChange={(e) => setIsCommunicationAddressSame(e.target.checked)}
+                    className="hidden-checkbox"
+                  />
+                  <span className={`checkbox-custom-box ${isCommunicationAddressSame ? 'checked' : ''}`}>
+                    {isCommunicationAddressSame && (
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    )}
+                  </span>
+                </span>
+                <span className="checkbox-text font-14">Communication Address Is Same As Aadhaar Address.</span>
+              </label>
+            </div>
+
+            {/* Communication Address Fields (shown when checkbox is checked) */}
+            {isCommunicationAddressSame && (
+              <div className="communication-address-fields animate-fade-down">
+                {/* <h4 className="fields-section-title">Communication Address</h4> */}
+
+                <div className="form-group">
+                  <label className="input-label">Communication Zipcode <span className="req-star">*</span></label>
+                  <input
+                    type="text" maxLength="6"
+                    value={commZipcode}
+                    onChange={(e) => setCommZipcode(e.target.value.replace(/\D/g, ''))}
+                    placeholder="Enter 6-digit zipcode"
+                    readOnly={isCommunicationAddressSame}
+                    className={`form-input-field ${errors.commZipcode ? 'error-border' : ''}`}
+                  />
+                  {errors.commZipcode && <span className="error-text-message">{errors.commZipcode}</span>}
+                </div>
+
+                <div className="form-group">
+                  <label className="input-label">Communication City <span className="req-star">*</span></label>
+                  <input
+                    type="text"
+                    value={commCity}
+                    onChange={(e) => setCommCity(e.target.value)}
+                    placeholder="Enter city"
+                    readOnly={isCommunicationAddressSame}
+                    className={`form-input-field ${errors.commCity ? 'error-border' : ''}`}
+                  />
+                  {errors.commCity && <span className="error-text-message">{errors.commCity}</span>}
+                </div>
+
+                <div className="form-group">
+                  <label className="input-label">Communication State <span className="req-star">*</span></label>
+                  <input
+                    type="text"
+                    value={commState}
+                    onChange={(e) => setCommState(e.target.value)}
+                    placeholder="Enter state"
+                    readOnly={isCommunicationAddressSame}
+                    className={`form-input-field ${errors.commState ? 'error-border' : ''}`}
+                  />
+                  {errors.commState && <span className="error-text-message">{errors.commState}</span>}
+                </div>
+
+                <div className="form-group">
+                  <label className="input-label">Communication Addr Line1 <span className="req-star">*</span></label>
+                  <input
+                    type="text" maxLength="30"
+                    value={commAddrLine1}
+                    onChange={(e) => setCommAddrLine1(e.target.value)}
+                    placeholder="Street, Plot No., Building"
+                    readOnly={isCommunicationAddressSame}
+                    className={`form-input-field ${errors.commAddrLine1 ? 'error-border' : ''}`}
+                  />
+                  {errors.commAddrLine1 && <span className="error-text-message">{errors.commAddrLine1}</span>}
+                </div>
+
+                <div className="form-group">
+                  <label className="input-label">Communication Addr Line2</label>
+                  <input
+                    type="text" maxLength="30"
+                    value={commAddrLine2}
+                    onChange={(e) => setCommAddrLine2(e.target.value)}
+                    placeholder="Locality, Sector"
+                    readOnly={isCommunicationAddressSame}
+                    className={`form-input-field ${errors.commAddrLine2 ? 'error-border' : ''}`}
+                  />
+                  {errors.commAddrLine2 && <span className="error-text-message">{errors.commAddrLine2}</span>}
+                </div>
+
+                <div className="form-group">
+                  <label className="input-label">Communication Addr Line3</label>
+                  <input
+                    type="text" maxLength="30"
+                    value={commAddrLine3}
+                    onChange={(e) => setCommAddrLine3(e.target.value)}
+                    placeholder="Additional details"
+                    readOnly={isCommunicationAddressSame}
+                    className={`form-input-field ${errors.commAddrLine3 ? 'error-border' : ''}`}
+                  />
+                  {errors.commAddrLine3 && <span className="error-text-message">{errors.commAddrLine3}</span>}
+                </div>
+
+                <div className="form-group">
+                  <label className="input-label">Communication Addr Landmark <span className="req-star">*</span></label>
+                  <input
+                    type="text" maxLength="30"
+                    value={commAddrLandmark}
+                    onChange={(e) => setCommAddrLandmark(e.target.value)}
+                    readOnly={isCommunicationAddressSame}
+                    placeholder="Nearby landmark"
+                    className={`form-input-field ${errors.commAddrLandmark ? 'error-border' : ''}`}
+                  />
+                  {errors.commAddrLandmark && <span className="error-text-message">{errors.commAddrLandmark}</span>}
+                </div>
+              </div>
+            )}
+
+          </div>{/* end .form-content-bordered */}
+
+          {/* Submit button — outside the bordered box */}
           <button
             type="submit"
             disabled={!isFormValid || isSubmitting}
@@ -383,6 +359,7 @@ const CustomerDetailsSA = ({ onFormSubmit, processVariables }) => {
           >
             {isSubmitting ? 'Processing...' : 'Next'}
           </button>
+
         </form>
       </div>
     </div>
