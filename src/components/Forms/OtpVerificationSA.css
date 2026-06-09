@@ -1,0 +1,355 @@
+/* OtpVerificationSA.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary-blue: #003366;
+  --secondary-blue: #00529B;
+  --sky-blue: #0091FF; /* Bright sky blue from Figma mockup */
+  --kotak-red: #ED1C24;
+  --bg-light: #F8FAFC;
+  --white: #FFFFFF;
+  --text-main: #1E293B;
+  --text-muted: #64748B;
+  --border-color: #E2E8F0;
+  --error-color: #EF4444;
+  --success-color: #10B981;
+  --input-height: 54px;
+}
+
+/* Page wrapper centering the card */
+.otp-form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  padding: 2rem;
+  background-color: var(--bg-light);
+  font-family: 'Outfit', sans-serif;
+}
+
+/* Responsive card matching validate-card */
+.otp-card {
+  width: 100%;
+  max-width: 500px;
+  background: var(--white);
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  position: relative;
+  box-sizing: border-box;
+  animation: fadeInOtpCard 0.5s ease-out;
+}
+
+@keyframes fadeInOtpCard {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header inside card matching validate-header */
+.otp-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.otp-header h2 {
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 100%;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  color: #000000;
+}
+
+.otp-header h3 {
+  color: var(--text-main);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 1rem;
+  text-align: left;
+}
+
+.otp-header p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  text-align: left;
+}
+
+/* Back button in the top left corner of the card */
+.back-arrow-btn {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  transition: transform 0.2s ease;
+  outline: none;
+}
+
+.back-arrow-btn:hover {
+  transform: translateX(-2px);
+}
+
+.otp-form-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Sub-card sections inside main card for Mobile & Email OTP */
+.otp-card-section {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.otp-sent-title {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #000000;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.3;
+}
+
+.form-group-label {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 0.5rem;
+}
+
+.otp-label-text {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--secondary-blue);
+  line-height: 1;
+}
+
+.required-star {
+  color: var(--kotak-red);
+  font-weight: bold;
+  font-size: 0.8rem;
+}
+
+.otp-boxes-container {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.otp-digit-input {
+  width: 38px;
+  height: 40px;
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-main);
+  background: var(--white);
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.otp-digit-input:focus:not(:disabled) {
+  outline: none;
+  border-color: var(--secondary-blue);
+  box-shadow: 0 0 0 2px rgba(0, 82, 155, 0.15);
+}
+
+.otp-digit-input.verified {
+  border-color: var(--success-color);
+  background: #F0FDF4;
+  color: #166534;
+}
+
+.otp-digit-input.error {
+  border-color: var(--error-color);
+  background: #FEF2F2;
+  color: #991B1B;
+}
+
+/* Centered timer text from Figma mockup */
+.expiry-timer-text {
+  font-size: 0.75rem;
+  color: #64748B;
+  text-align: center;
+  margin-top: 6px;
+  line-height: 1.2;
+}
+
+.expiry-timer-text strong {
+  font-weight: 700;
+  color: #000000;
+}
+
+/* Centered resend link from Figma mockup */
+.resend-action-container {
+  text-align: center;
+  margin-top: 4px;
+}
+
+.resend-active-link {
+  background: none;
+  border: none;
+  color: var(--secondary-blue);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.resend-active-link:hover:not(:disabled) {
+  color: var(--kotak-red);
+  text-decoration: underline;
+}
+
+.resend-active-link:disabled {
+  color: #94A3B8;
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
+.resend-disabled-text {
+  font-size: 0.75rem;
+  color: #94A3B8;
+}
+
+.otp-error-message {
+  color: var(--error-color);
+  font-size: 0.725rem;
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* Verify button inside the sub-card section (sky-blue theme) */
+.verify-btn-container {
+  position: absolute;
+  bottom: 1.25rem;
+  right: 1.25rem;
+}
+
+.verify-pill-btn {
+  border: 1px solid var(--sky-blue);
+  border-radius: 20px;
+  color: var(--sky-blue);
+  background: var(--white);
+  padding: 4px 18px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  min-width: 68px;
+  height: 28px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.verify-pill-btn:hover:not(:disabled) {
+  background: var(--sky-blue);
+  color: var(--white);
+}
+
+.verify-pill-btn:disabled:not(.verified) {
+  border-color: #E2E8F0;
+  color: #94A3B8;
+  cursor: not-allowed;
+  background: #F8FAFC;
+}
+
+.verify-pill-btn.verified {
+  border-color: var(--success-color);
+  color: #15803D;
+  background: #F0FDF4;
+  cursor: default;
+}
+
+.pill-spinner {
+  width: 10px;
+  height: 10px;
+  border: 1.5px solid rgba(0, 145, 255, 0.2);
+  border-radius: 50%;
+  border-top-color: var(--sky-blue);
+  animation: spinPillOtp 0.8s linear infinite;
+}
+
+@keyframes spinPillOtp {
+  to { transform: rotate(360deg); }
+}
+
+/* Proceed / Submit button at bottom of main card matching ValidateSA */
+.proceed-submit-btn {
+  width: 100%;
+  height: var(--input-height);
+  background: var(--primary-blue);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-sizing: border-box;
+}
+
+.proceed-submit-btn:hover:not(:disabled) {
+  background: var(--secondary-blue);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 51, 102, 0.2);
+}
+
+.proceed-submit-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.proceed-submit-btn:disabled {
+  background: #CBD5E1;
+  color: #94A3B8;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+@media (max-width: 480px) {
+  .otp-card {
+    padding: 1.5rem;
+  }
+  
+  .back-arrow-btn {
+    top: 1.2rem;
+    left: 1.2rem;
+  }
+  
+  .otp-boxes-container {
+    justify-content: space-between;
+    gap: 0.25rem;
+  }
+  
+  .otp-digit-input {
+    width: calc((100% - 1.5rem) / 6);
+  }
+}

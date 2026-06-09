@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './styles/Dashboard.css';
-import './styles/DynamicForm.css';
+import './styles/Forms.css';
 import { login, startProcessInstance, getFormSchema, completeTask } from './services/api';
 import { preparePayload } from './services/RequestBodies';
 
@@ -8,9 +8,12 @@ import { preparePayload } from './services/RequestBodies';
 import StatCard from './components/Dashboard/StatCard';
 import ProductButton from './components/Dashboard/ProductButton';
 import DashboardListItem from './components/Dashboard/DashboardListItem';
-import DynamicForm from './components/DynamicForm';
+// import DynamicForm from './components/DynamicForm'; // Disabled for now
 import CaptureDocumentForm from './components/CaptureDocumentForm';
 import LoginPage from './components/LoginPage';
+import ValidateSA from './components/Forms/ValidateSA';
+import OtpVerificationSA from './components/Forms/OtpVerificationSA';
+
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -65,35 +68,11 @@ function App() {
         console.warn(`[loadTaskForm] Received invalid or empty schema for ${taskName}`);
       }
 
-      // ── Sanitize schema BEFORE storing in state ──────────────────────────
-      const JUNK_LABEL = /^(checkbox|radio)\s*\*?\s*$/i;
+      // Extract the form identifier (id, keyName, or formKey) from the schema itself
+      const actualFormKey = schema.form?.id || schema.form?.keyName || schema.formKey || taskKey;
 
-      const sanitizeComponents = (components) => {
-        if (!Array.isArray(components)) return components;
-        return components.map((comp) => {
-          const cleaned = { ...comp };
-          if (JUNK_LABEL.test((cleaned.label ?? '').trim())) cleaned.label = '';
-          if (JUNK_LABEL.test((cleaned.description ?? '').trim())) cleaned.description = '';
-          if (JUNK_LABEL.test((cleaned.text ?? '').trim())) cleaned.text = '';
-          if (cleaned.components) cleaned.components = sanitizeComponents(cleaned.components);
-          if (cleaned.columns) cleaned.columns = sanitizeComponents(cleaned.columns);
-          if (cleaned.rows) cleaned.rows = sanitizeComponents(cleaned.rows);
-          return cleaned;
-        });
-      };
-
-      const sanitizedForm = schema.form
-        ? {
-          ...schema.form,
-          components: sanitizeComponents(schema.form.components),
-        }
-        : schema.form;
-
-      const sanitizedSchema = { ...schema, form: sanitizedForm };
-      // ─────────────────────────────────────────────────────────────────────
-
-      console.log(`[loadTaskForm] Updating state for task: ${taskName}`);
-      setFormSchema({ ...sanitizedSchema, taskName });
+      console.log(`[loadTaskForm] Updating state for task: ${taskName} with actualFormKey: ${actualFormKey}`, schema);
+      setFormSchema({ ...schema, taskName, formKey: actualFormKey });
       setProcessVariables(schema.processVariables || {});
       setCurrentTask({ userTaskKey: taskKey, name: taskName });
       setView('form');
@@ -256,26 +235,25 @@ function App() {
               onFormSubmit={handleFormSubmit}
               onBack={() => setView('dashboard')}
             />
+          ) : formSchema?.formKey === 'validate_sa' ? (
+            <ValidateSA
+              key={currentTask.userTaskKey}
+              processVariables={processVariables}
+              onFormSubmit={handleFormSubmit}
+            />
+          ) : formSchema?.formKey === 'otp_verification_sa' ? (
+            <OtpVerificationSA
+              key={currentTask.userTaskKey}
+              processVariables={processVariables}
+              onFormSubmit={handleFormSubmit}
+              onBack={() => setView('dashboard')}
+            />
           ) : (
-            <>
-              {/* <div className="form-page-header">
-                <button className="form-back-btn" onClick={() => setView('dashboard')}>
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M19 12H5" stroke="#003366" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M12 19L5 12L12 5" stroke="#003366" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </button>
-              </div> */}
-
-              <div className="form-content-area">
-                <DynamicForm
-                  key={currentTask.userTaskKey}
-                  schema={formSchema}
-                  processVariables={processVariables}
-                  onFormSubmit={handleFormSubmit}
-                />
-              </div>
-            </>
+            <div className="unsupported-form-view">
+              <h2>Form Implementation Pending</h2>
+              <p>The form for <strong>{currentTask.name}</strong> ({currentTask.userTaskKey}) has not been custom-implemented yet.</p>
+              <button className="form-back-btn" onClick={() => setView('dashboard')}>Back to Dashboard</button>
+            </div>
           )}
           {message && <div className="form-message">{message}</div>}
         </div>
