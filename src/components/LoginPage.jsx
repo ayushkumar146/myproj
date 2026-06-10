@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { login } from '../services/api';
 
-const LoginPage = ({ onLoginSuccess }) => {
+const LoginPage = ({ onLoginSuccess, onTestBiometric }) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -46,6 +46,16 @@ const LoginPage = ({ onLoginSuccess }) => {
             'Enter Dashboard'
           )}
         </button>
+
+        <div style={{ marginTop: '20px', textAlign: 'center' }}>
+          <button 
+            type="button" 
+            onClick={onTestBiometric}
+            style={{ padding: '10px 20px', background: 'transparent', border: '1px solid #0052cc', color: '#0052cc', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
+          >
+            Test Biometric Device
+          </button>
+        </div>
         
         <div className="login-footer">
           <p>© 2026 iServeU Technology Private Limited</p>

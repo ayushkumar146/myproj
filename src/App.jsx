@@ -17,6 +17,7 @@ import AadhaarValidate from './components/Forms/AadhaarValidate';
 import AuthConsentKotak from './components/Forms/AuthConsentKotak';
 import FaceScanKotak from './components/Forms/FaceScanKotak';
 import FingerprintScanKotak from './components/Forms/FingerprintScanKotak';
+import FingerPrintAuthKotak from './components/Forms/FingerPrintAuthKotak';
 import CustomerDetailsSA from './components/Forms/CustomerDetailsSA';
 import PersonalDetailsSA from './components/Forms/PersonalDetailsSA';
 import ProductSectionSA from './components/Forms/ProductSectionSA';
@@ -28,11 +29,13 @@ import AadhaarSeedingDeclarationSA from './components/Forms/AadhaarSeedingDeclar
 import MitcDeclarationSA from './components/Forms/MitcDeclarationSA';
 import CustomerMeetingLocationSA from './components/Forms/CustomerMeetingLocationSA';
 import ApplicationSubmittedSA from './components/Forms/ApplicationSubmittedSA';
+import BiometricTest from './components/BiometricTest';
 
 function App() {
   const [loading, setLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [view, setView] = useState('dashboard'); // 'dashboard' or 'form'
+  const [unauthView, setUnauthView] = useState('login'); // 'login' or 'biometric_test'
   const [formSchema, setFormSchema] = useState(null);
   const [processVariables, setProcessVariables] = useState({});
   const [token, setToken] = useState('');
@@ -243,7 +246,11 @@ function App() {
             <div className="spinner"></div>
           </div>
         )}
-        <LoginPage onLoginSuccess={handleLoginSuccess} />
+        {unauthView === 'biometric_test' ? (
+          <BiometricTest onBack={() => setUnauthView('login')} />
+        ) : (
+          <LoginPage onLoginSuccess={handleLoginSuccess} onTestBiometric={() => setUnauthView('biometric_test')} />
+        )}
       </div>
     );
   }
@@ -305,6 +312,12 @@ function App() {
             />
           ) : formSchema?.formKey === 'finger_print_kotak' ? (
             <FingerprintScanKotak
+              key={currentTask.userTaskKey}
+              processVariables={processVariables}
+              onFormSubmit={handleFormSubmit}
+            />
+          ) : formSchema?.formKey === 'finger_print_auth_kotak' ? (
+            <FingerPrintAuthKotak
               key={currentTask.userTaskKey}
               processVariables={processVariables}
               onFormSubmit={handleFormSubmit}

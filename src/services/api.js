@@ -239,7 +239,7 @@ export const getFormSchema = async (accessToken, formKey) => {
     };
   }
 
-  if (formKey === 'finger_print_kotak') {
+  if (formKey === 'finger_print_kotak' || formKey === 'finger_print_auth_kotak') {
     console.log('Returning mock Fingerprint Scan schema directly for key:', formKey);
     return {
       form: {
@@ -267,7 +267,7 @@ export const getFormSchema = async (accessToken, formKey) => {
           }
         ],
         type: "default",
-        id: "finger_print_kotak",
+        id: formKey,
         executionPlatform: "Camunda Cloud",
         executionPlatformVersion: "8.8.0",
         exporter: {
@@ -475,7 +475,7 @@ export const getFormSchema = async (accessToken, formKey) => {
           processVariables: {}
         };
       }
-      if (formKey && (formKey.toLowerCase().includes('finger') || formKey.toLowerCase().includes('print') || formKey === 'finger_print_kotak')) {
+      if (formKey && (formKey.toLowerCase().includes('finger') || formKey.toLowerCase().includes('print') || formKey === 'finger_print_kotak' || formKey === 'finger_print_auth_kotak')) {
         console.warn(`getFormSchema failed with status ${response.status}, falling back to mock Fingerprint Scan schema`);
         return {
           form: {
@@ -484,7 +484,7 @@ export const getFormSchema = async (accessToken, formKey) => {
               { "label": "Proceed", "action": "submit", "type": "button", "id": "Field_1fqmdrz" }
             ],
             type: "default",
-            id: "finger_print_kotak"
+            id: formKey
           },
           processVariables: {}
         };
@@ -635,7 +635,7 @@ export const getFormSchema = async (accessToken, formKey) => {
         processVariables: {}
       };
     }
-    if (formKey && (formKey.toLowerCase().includes('finger') || formKey.toLowerCase().includes('print') || formKey === 'finger_print_kotak')) {
+    if (formKey && (formKey.toLowerCase().includes('finger') || formKey.toLowerCase().includes('print') || formKey === 'finger_print_kotak' || formKey === 'finger_print_auth_kotak')) {
       console.warn(`getFormSchema encountered error: ${error.message}, falling back to mock Fingerprint Scan schema`);
       return {
         form: {
@@ -644,7 +644,7 @@ export const getFormSchema = async (accessToken, formKey) => {
             { "label": "Proceed", "action": "submit", "type": "button", "id": "Field_1fqmdrz" }
           ],
           type: "default",
-          id: "finger_print_kotak"
+          id: formKey
         },
         processVariables: {}
       };
