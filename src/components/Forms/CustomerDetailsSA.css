@@ -28,15 +28,16 @@
   margin-bottom: 24px;
 }
 
-.customer-details-header h2 {
-  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
-  font-weight: 700;
-  font-size: 22px;
-  line-height: 100%;
-  letter-spacing: 0%;
-  text-align: center;
-  color: rgba(0, 0, 0, 1);
-  margin: 0 0 6px 0;
+.customer-details-card .customer-details-header h2 {
+  font-family: 'Frutiger LT Std', sans-serif !important;
+  font-weight: 700 !important;
+  font-style: normal !important;
+  font-size: 22px !important;
+  line-height: 100% !important;
+  letter-spacing: 0px !important;
+  text-align: center !important;
+  color: rgba(0, 0, 0, 1) !important;
+  margin: 0 0 6px 0 !important;
 }
 
 .customer-details-header h3 {
@@ -207,12 +208,15 @@
   border-color: #00529B;
 }
 
-.checkbox-text.font-14 {
+.customer-details-card .checkbox-text.font-14 {
   font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
-  font-size: 13.5px;
-  font-weight: 400;
-  color: #334155;
-  line-height: 1.4;
+  font-weight: 300;
+  font-style: normal; /* 45 Light */
+  font-size: 12px;
+  line-height: 140%;
+  letter-spacing: -1%;
+  text-transform: capitalize;
+  color: rgba(0, 0, 0, 1);
 }
 
 /* Form Fields */
@@ -247,14 +251,14 @@
   min-width: 0; /* Prevents overflow inside flex containers */
 }
 
-.input-label {
+.customer-details-card .input-label {
   font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
   font-weight: 400;
   font-style: normal; /* 55 Roman */
   font-size: 14px;
   line-height: 100%;
   letter-spacing: 0%;
-  color: #00529B; /* Kotak Blue 2 */
+  color: rgba(0, 51, 102, 1); /* Kotak Blue */
 }
 
 .req-star {
@@ -319,8 +323,12 @@ textarea.form-input-field {
   border-radius: 8px;
   color: #FFFFFF;
   font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-weight: 400;
+  font-style: normal; /* 55 Roman */
   font-size: 16px;
-  font-weight: 600;
+  line-height: 27px;
+  letter-spacing: 0%;
+  text-transform: capitalize;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -41,6 +41,19 @@ body {
   min-height: 100vh;
 }
 
+/* Force all forms inside the 932px cards to push their submit buttons to the bottom */
+form {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+button[type="submit"], 
+.fjs-button[type="submit"],
+.submit-btn {
+  margin-top: auto !important;
+}
+
 .container {
   width: 100%;
   max-width: var(--container-width);
