@@ -175,6 +175,7 @@ const ValidateSA = ({ onFormSubmit, processVariables }) => {
                 onChange={handleInputChange}
                 className={`custom-masked-input ${errors.panNumber ? 'error' : ''}`}
                 maxLength={10}
+                placeholder="Enter PAN Number"
               />
               <div className="custom-masked-display">
                 {!formData.panNumber ? (
@@ -221,6 +222,7 @@ const ValidateSA = ({ onFormSubmit, processVariables }) => {
                   onChange={handleInputChange}
                   className={`custom-masked-input ${showAadhaar ? 'show-text' : ''} ${errors.aadhaarNumber ? 'error' : ''}`}
                   maxLength={12}
+                  placeholder="Enter Aadhaar Number"
                 />
                 {!showAadhaar && (
                   <div className="custom-masked-display">
