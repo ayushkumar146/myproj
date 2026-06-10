@@ -54,13 +54,15 @@
 }
 
 .otp-header h2 {
-  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
-  font-size: 22px;
+  font-family: 'Frutiger LT Std', sans-serif;
   font-weight: 700;
+  font-size: 22px;
   line-height: 100%;
+  letter-spacing: 0;
   text-align: center;
+  color: rgba(0, 0, 0, 1);
+  margin-top: 0;
   margin-bottom: 0.5rem;
-  color: #000000;
 }
 
 .otp-header h3 {
@@ -160,22 +162,24 @@
   text-align: center;
   font-size: 1.2rem;
   font-weight: 600;
-  color: var(--text-main);
+  color: #000000;
   background: var(--white);
   transition: all 0.2s ease;
   box-sizing: border-box;
+}
+
+.otp-digit-input:disabled {
+  background: var(--white);
+  color: #000000;
+  border-color: #CBD5E1;
+  opacity: 1;
+  -webkit-text-fill-color: #000000;
 }
 
 .otp-digit-input:focus:not(:disabled) {
   outline: none;
   border-color: var(--secondary-blue);
   box-shadow: 0 0 0 2px rgba(0, 82, 155, 0.15);
-}
-
-.otp-digit-input.verified {
-  border-color: var(--success-color);
-  background: #F0FDF4;
-  color: #166534;
 }
 
 .otp-digit-input.error {
@@ -279,9 +283,9 @@
 }
 
 .verify-pill-btn.verified {
-  border-color: var(--success-color);
-  color: #15803D;
-  background: #F0FDF4;
+  border-color: var(--primary-blue);
+  background: var(--primary-blue);
+  color: var(--white);
   cursor: default;
 }
 
@@ -302,12 +306,15 @@
 .proceed-submit-btn {
   width: 100%;
   height: var(--input-height);
-  background: #3B82F6; /* Lighter blue */
+  background: rgba(0, 51, 102, 1);
   color: white;
   border: none;
   border-radius: 12px;
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-family: 'Frutiger LT Std', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 27px;
+  letter-spacing: 0;
   cursor: pointer;
   margin-top: 1rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -319,7 +326,7 @@
 }
 
 .proceed-submit-btn:hover:not(:disabled) {
-  background: #2563EB; /* Slightly darker hover */
+  background: rgba(0, 41, 82, 1); /* Slightly darker hover */
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }

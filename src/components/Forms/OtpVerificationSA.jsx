@@ -5,11 +5,13 @@ const OtpVerificationSA = ({ onFormSubmit, processVariables, onBack }) => {
   // Helpers
   const getMaskedMobileNumber = () => {
     const num = processVariables?.validateDetails?.mobileNumberLinkedToAadhaar || '';
-    if (num.length >= 10) {
+    if (num.length >= 4) {
       return `XXXXXX${num.slice(-4)}`;
     }
     return 'XXXXXX8945'; // Fallback to mockup phone number
   };
+
+
 
   const formatTimer = (seconds) => {
     const m = Math.floor(seconds / 60);
@@ -268,8 +270,8 @@ const OtpVerificationSA = ({ onFormSubmit, processVariables, onBack }) => {
                   <span className="pill-spinner"></span>
                 ) : isMobileVerified ? (
                   <>
-                    <svg className="check-svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="20 6 9 17 4 12"></polyline>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z"/>
                     </svg>
                     Verified
                   </>
@@ -342,8 +344,8 @@ const OtpVerificationSA = ({ onFormSubmit, processVariables, onBack }) => {
                   <span className="pill-spinner"></span>
                 ) : isEmailVerified ? (
                   <>
-                    <svg className="check-svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="20 6 9 17 4 12"></polyline>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z"/>
                     </svg>
                     Verified
                   </>
