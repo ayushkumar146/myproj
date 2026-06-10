@@ -19,7 +19,26 @@ const FingerPrintAuthKotak = ({ onFormSubmit, processVariables }) => {
       }
     };
     initDevice();
-  }, []);
+
+    // 1-minute auto-submit timeout
+    const timeoutId = setTimeout(() => {
+      setCaptureStatus((prev) => {
+        if (prev === 'success') return prev; // already succeeded
+        
+        console.log('1 minute timeout reached. Auto-submitting Fingerprint Auth as FAILED.');
+        onFormSubmit({
+          fingerPrintAuthKotak: {
+            status: 'FAILED',
+            captureData: 'TIMEOUT'
+          },
+          authfinger: 'FAILED'
+        });
+        return prev;
+      });
+    }, 20000);
+
+    return () => clearTimeout(timeoutId);
+  }, [onFormSubmit]);
 
   const handleCapture = async () => {
     if (deviceStatus !== 'ready' || !port || captureStatus === 'capturing') return;
@@ -28,18 +47,32 @@ const FingerPrintAuthKotak = ({ onFormSubmit, processVariables }) => {
     
     try {
       const res = await captureBiometricData(port, "http");
+      const xmlData = res?.data || "";
+      
+      // Check for failure based on string length or errCode in XML
+      const isShort = xmlData.length < 100;
+      const hasError = xmlData.includes('errCode="') && !xmlData.includes('errCode="0"');
+      
+      if (isShort || hasError) {
+        setCaptureStatus('failed');
+        // Extract error info if possible
+        const errInfoMatch = xmlData.match(/errInfo="([^"]+)"/);
+        const errorMsg = errInfoMatch ? errInfoMatch[1] : "Capture failed or invalid data. Please try again.";
+        setErrorMessage(errorMsg);
+        return; // Do NOT auto-submit, let them retry until 1 min timeout
+      }
+
       setCaptureStatus('success');
       
-      // Check if response contains success logic, usually we check if error code is 0 in XML.
-      // Assuming a valid capture string indicates success for this mock.
       setTimeout(() => {
         onFormSubmit({
           fingerPrintAuthKotak: {
             status: 'SUCCESS',
-            captureData: res.data
-          }
+            captureData: xmlData
+          },
+          authfinger: 'SUCCESS'
         });
-      }, 1500); // 1.5 second delay to let user see "success" message
+      }, 1500);
     } catch (err) {
       setCaptureStatus('failed');
       setErrorMessage(err.message || 'Capture failed. Please try again.');

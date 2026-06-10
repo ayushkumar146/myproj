@@ -28,6 +28,31 @@ const FingerprintScanKotak = ({ onFormSubmit, processVariables }) => {
     return () => clearInterval(interval);
   }, [scanStatus]);
 
+  useEffect(() => {
+    if (isInitiallyCompleted) return;
+
+    const timeoutId = setTimeout(() => {
+      setIsSubmitting((prev) => {
+        if (prev) return prev; // Already submitting
+        
+        console.log('1 minute timeout reached. Auto-submitting Fingerprint Scan as FAILED.');
+        const payload = {
+          fingerPrintKotak: {
+            fingerPrintScanStatus: 'FAILED',
+            scanCompletedAt: new Date().toISOString(),
+            reason: 'TIMEOUT'
+          },
+          fingerPrintScanStatus: 'FAILED',
+          authfinger: 'FAILED'
+        };
+        onFormSubmit(payload);
+        return true;
+      });
+    }, 60000);
+
+    return () => clearTimeout(timeoutId);
+  }, [isInitiallyCompleted, onFormSubmit]);
+
   const handleStartScan = () => {
     setScanStatus('scanning');
   };
@@ -42,7 +67,8 @@ const FingerprintScanKotak = ({ onFormSubmit, processVariables }) => {
         fingerPrintScanStatus: 'SUCCESS',
         scanCompletedAt: new Date().toISOString()
       },
-      fingerPrintScanStatus: 'SUCCESS'
+      fingerPrintScanStatus: 'SUCCESS',
+      authfinger: 'SUCCESS'
     };
     onFormSubmit(payload);
   };
