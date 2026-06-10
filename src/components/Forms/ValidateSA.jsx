@@ -12,6 +12,7 @@ const ValidateSA = ({ onFormSubmit, processVariables }) => {
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showAadhaar, setShowAadhaar] = useState(false);
 
   const patterns = {
     mobileNumberLinkedToAadhaar: /^[6-9]\d{9}$/,
@@ -166,15 +167,23 @@ const ValidateSA = ({ onFormSubmit, processVariables }) => {
 
           <div className="form-group">
             <label>PAN Number<span className="required-asterisk">*</span></label>
-            <input
-              type="text"
-              name="panNumber"
-              value={formData.panNumber}
-              onChange={handleInputChange}
-              placeholder="Enter PAN Number"
-              className={errors.panNumber ? 'error' : ''}
-              maxLength={10}
-            />
+            <div className="custom-masked-wrapper">
+              <input
+                type="text"
+                name="panNumber"
+                value={formData.panNumber}
+                onChange={handleInputChange}
+                className={`custom-masked-input ${errors.panNumber ? 'error' : ''}`}
+                maxLength={10}
+              />
+              <div className="custom-masked-display">
+                {!formData.panNumber ? (
+                  <span className="custom-masked-placeholder">Enter PAN Number</span>
+                ) : (
+                  formData.panNumber.replace(/./g, 'X')
+                )}
+              </div>
+            </div>
             {errors.panNumber && <span className="error-message">{errors.panNumber}</span>}
           </div>
 
@@ -190,19 +199,60 @@ const ValidateSA = ({ onFormSubmit, processVariables }) => {
               maxLength={10}
             />
             {errors.cnfPanNumber && <span className="error-message">{errors.cnfPanNumber}</span>}
+            
+            {formData.panNumber && formData.cnfPanNumber && formData.panNumber === formData.cnfPanNumber && !errors.panNumber && !errors.cnfPanNumber && (
+              <div className="pan-matched-message">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#00529B" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+                <span>PAN Matched</span>
+              </div>
+            )}
           </div>
 
           <div className="form-group">
             <label>Aadhaar Number<span className="required-asterisk">*</span></label>
-            <input
-              type="text"
-              name="aadhaarNumber"
-              value={formData.aadhaarNumber}
-              onChange={handleInputChange}
-              placeholder="Enter Aadhaar Number"
-              className={errors.aadhaarNumber ? 'error' : ''}
-              maxLength={12}
-            />
+            <div className="password-input-wrapper">
+              <div className="custom-masked-wrapper" style={{ flex: 1 }}>
+                <input
+                  type="text"
+                  name="aadhaarNumber"
+                  value={formData.aadhaarNumber}
+                  onChange={handleInputChange}
+                  className={`custom-masked-input ${showAadhaar ? 'show-text' : ''} ${errors.aadhaarNumber ? 'error' : ''}`}
+                  maxLength={12}
+                />
+                {!showAadhaar && (
+                  <div className="custom-masked-display">
+                    {!formData.aadhaarNumber ? (
+                      <span className="custom-masked-placeholder">Enter Aadhaar Number</span>
+                    ) : (
+                      formData.aadhaarNumber.replace(/./g, 'X').match(/.{1,4}/g)?.join(' ') || ''
+                    )}
+                  </div>
+                )}
+                {showAadhaar && !formData.aadhaarNumber && (
+                  <div className="custom-masked-display">
+                    <span className="custom-masked-placeholder">Enter Aadhaar Number</span>
+                  </div>
+                )}
+              </div>
+              <button 
+                type="button" 
+                className="toggle-password-btn"
+                onClick={() => setShowAadhaar(!showAadhaar)}
+              >
+                {showAadhaar ? (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="rgba(0,0,0,1)" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                  </svg>
+                ) : (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="rgba(0,0,0,1)" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11.83 9L15 12.16V12a3 3 0 0 0-3-3h-.17zm-4.3.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.3-3.8c4.29 0 7.97 2.34 9.67 6-.68 1.46-1.69 2.75-2.92 3.73l-1.45-1.45c1.04-.79 1.87-1.8 2.37-2.98C17.65 8.16 14.15 6 12 6c-1.12 0-2.18.23-3.15.63L7.54 5.32C8.9 4.47 10.4 4 12 4zm-9.18.78L4.25 6.2 5.5 7.45C3.39 8.84 1.7 10.95 1 13.3c1.7 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l2.14 2.14 1.41-1.41L2.82 4.78z"/>
+                  </svg>
+                )}
+              </button>
+            </div>
             {errors.aadhaarNumber && <span className="error-message">{errors.aadhaarNumber}</span>}
           </div>
 
