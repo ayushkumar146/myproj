@@ -142,6 +142,16 @@
   background: #FFF5F5;
 }
 
+/* Override browser autofill background */
+.form-group input:-webkit-autofill,
+.form-group input:-webkit-autofill:hover, 
+.form-group input:-webkit-autofill:focus, 
+.form-group input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  -webkit-text-fill-color: var(--text-main) !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
 .error-message {
   color: var(--error-color);
   font-size: 0.8rem;
@@ -191,14 +201,9 @@
   color: white;
 }
 
-/* Micro-animations for inputs */
 .form-group input:not(:placeholder-shown):not(:focus) {
   border-color: var(--border-color);
   background: var(--white);
-}
-
-.form-group input:not(:placeholder-shown):valid:not(.error) {
-  border-color: var(--success-color);
 }
 
 .pan-matched-message {

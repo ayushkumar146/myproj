@@ -19,7 +19,7 @@ const ValidateSA = ({ onFormSubmit, processVariables }) => {
     emailId: /^[A-Za-z0-9._%+-]+@(?!kotak\.com$)[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
     panNumber: /^[A-Z]{3}[PCHFTABGL]{1}[A-Z]{1}[0-9]{4}[A-Z]{1}$/,
     cnfPanNumber: /^[A-Z]{3}[PCHFTABGL]{1}[A-Z]{1}[0-9]{4}[A-Z]{1}$/,
-    aadhaarNumber: /^[2-9][0-9]{11}$/
+    aadhaarNumber: /^[2-9][0-9]{3} [0-9]{4} [0-9]{4}$/
   };
 
   const errorMessages = {
@@ -27,16 +27,19 @@ const ValidateSA = ({ onFormSubmit, processVariables }) => {
     emailId: "Please enter a valid email address.",
     panNumber: "Please enter a valid PAN number (e.g., ABCDE1234F).",
     cnfPanNumber: "Please enter a valid PAN number (e.g., ABCDE1234F).",
-    aadhaarNumber: "Please enter your Aadhaar number."
+    aadhaarNumber: "Please enter a valid 12-digit Aadhaar number (cannot start with 0 or 1)."
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     
-    // Capitalize PAN numbers
+    // Capitalize PAN numbers and format Aadhaar
     let finalValue = value;
     if (name === 'panNumber' || name === 'cnfPanNumber') {
       finalValue = value.toUpperCase();
+    } else if (name === 'aadhaarNumber') {
+      const digitsOnly = value.replace(/\D/g, '');
+      finalValue = digitsOnly.match(/.{1,4}/g)?.join(' ') || '';
     }
 
     setFormData(prev => ({
@@ -105,6 +108,7 @@ const ValidateSA = ({ onFormSubmit, processVariables }) => {
     const payload = {
       validateDetails: {
         ...formData,
+        aadhaarNumber: formData.aadhaarNumber.replace(/\s/g, ''),
         fieldCount: "5",
         cnfPanError: formData.panNumber !== formData.cnfPanNumber ? "Please Enter the same PAN Number in Both Fields." : ""
       }
@@ -221,7 +225,7 @@ const ValidateSA = ({ onFormSubmit, processVariables }) => {
                   value={formData.aadhaarNumber}
                   onChange={handleInputChange}
                   className={`custom-masked-input ${showAadhaar ? 'show-text' : ''} ${errors.aadhaarNumber ? 'error' : ''}`}
-                  maxLength={12}
+                  maxLength={14}
                   placeholder="Enter Aadhaar Number"
                 />
                 {!showAadhaar && (
@@ -229,7 +233,7 @@ const ValidateSA = ({ onFormSubmit, processVariables }) => {
                     {!formData.aadhaarNumber ? (
                       <span className="custom-masked-placeholder">Enter Aadhaar Number</span>
                     ) : (
-                      formData.aadhaarNumber.replace(/./g, 'X').match(/.{1,4}/g)?.join(' ') || ''
+                      formData.aadhaarNumber.replace(/\d/g, 'X')
                     )}
                   </div>
                 )}
