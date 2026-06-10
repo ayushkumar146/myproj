@@ -25,6 +25,8 @@ import DeclarationSA from './components/Forms/DeclarationSA';
 import AadhaarSeedingCheckSA from './components/Forms/AadhaarSeedingCheckSA';
 import AadhaarSeeding1SA from './components/Forms/AadhaarSeeding1SA';
 import AadhaarSeedingDeclarationSA from './components/Forms/AadhaarSeedingDeclarationSA';
+import MitcDeclarationSA from './components/Forms/MitcDeclarationSA';
+import CustomerMeetingLocationSA from './components/Forms/CustomerMeetingLocationSA';
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -334,6 +336,18 @@ function App() {
             />
           ) : formSchema?.formKey === 'declaration_aadhar_kotak' ? (
             <AadhaarSeedingDeclarationSA
+              key={currentTask.userTaskKey}
+              processVariables={processVariables}
+              onFormSubmit={handleFormSubmit}
+            />
+          ) : formSchema?.formKey === 'mitc_declaration_sa' ? (
+            <MitcDeclarationSA
+              key={currentTask.userTaskKey}
+              processVariables={processVariables}
+              onFormSubmit={handleFormSubmit}
+            />
+          ) : formSchema?.formKey === 'customer_meet_sa' ? (
+            <CustomerMeetingLocationSA
               key={currentTask.userTaskKey}
               processVariables={processVariables}
               onFormSubmit={handleFormSubmit}

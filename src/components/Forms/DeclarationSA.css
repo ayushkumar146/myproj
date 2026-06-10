@@ -43,8 +43,8 @@
 .dec-text {
   font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
   font-weight: 300;
-  font-size: 16px;
-  line-height: 27px;
+  font-size: 14px;
+  line-height: 23px;
   letter-spacing: 0%;
   color: rgba(0, 0, 0, 1);
   text-transform: capitalize;
@@ -100,8 +100,8 @@
   gap: 8px;
   font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
   font-weight: 300;
-  font-size: 16px;
-  line-height: 27px;
+  font-size: 14px;
+  line-height: 23px;
   color: rgba(0, 0, 0, 1);
   text-transform: capitalize;
   cursor: pointer;
@@ -110,8 +110,8 @@
 .dec-note {
   font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
   font-weight: 300;
-  font-size: 16px;
-  line-height: 27px;
+  font-size: 14px;
+  line-height: 23px;
   color: rgba(0, 0, 0, 1);
   text-transform: capitalize;
   margin: 4px 0 0 0;
