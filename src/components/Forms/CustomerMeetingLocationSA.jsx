@@ -89,6 +89,7 @@ const CustomerMeetingLocationSA = ({ processVariables, onFormSubmit }) => {
             text-transform: capitalize;
             color: rgba(0, 0, 0, 1);
           }
+
           .customer-meeting-form .cm-radio-container {
             padding: 18px 24px;
             gap: 12px;
@@ -99,6 +100,7 @@ const CustomerMeetingLocationSA = ({ processVariables, onFormSubmit }) => {
             flex-direction: column;
             margin-top: 16px;
           }
+
         `}</style>
 
         <form onSubmit={handleSubmit} className="pd-form">

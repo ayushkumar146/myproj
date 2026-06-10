@@ -279,6 +279,13 @@ export const getFormSchema = async (accessToken, formKey) => {
       processVariables: {}
     };
   }
+  if (formKey === 'app_submit_kotak') {
+    console.log('Returning mock Application Submitted schema directly for key:', formKey);
+    return {
+      form: { id: 'app_submit_kotak', type: 'default', components: [] },
+      processVariables: {}
+    };
+  }
 
   if (formKey === 'declaration_sa') {
     console.log('Returning mock Declaration schema directly for key:', formKey);
@@ -438,6 +445,10 @@ export const getFormSchema = async (accessToken, formKey) => {
     });
 
     if (!response.ok) {
+      if (formKey === 'app_submit_kotak') {
+        console.warn(`getFormSchema failed with status ${response.status}, falling back to mock Application Submitted schema`);
+        return { form: { id: "app_submit_kotak", type: "default", components: [] }, processVariables: {} };
+      }
       if (formKey && (formKey.toLowerCase().includes('otp') || formKey.toLowerCase().includes('verification'))) {
         console.warn(`getFormSchema failed with status ${response.status}, falling back to mock OTP Verification schema`);
         return getMockOtpVerificationSchema();
@@ -594,6 +605,10 @@ export const getFormSchema = async (accessToken, formKey) => {
 
     return await response.json();
   } catch (error) {
+    if (formKey === 'app_submit_kotak') {
+      console.warn(`getFormSchema encountered error: ${error.message}, falling back to mock Application Submitted schema`);
+      return { form: { id: "app_submit_kotak", type: "default", components: [] }, processVariables: {} };
+    }
     if (formKey && (formKey.toLowerCase().includes('otp') || formKey.toLowerCase().includes('verification') || formKey === 'otp_verification_sa')) {
       console.warn(`getFormSchema encountered error: ${error.message}, falling back to mock OTP Verification schema`);
       return getMockOtpVerificationSchema();

@@ -27,6 +27,7 @@ import AadhaarSeeding1SA from './components/Forms/AadhaarSeeding1SA';
 import AadhaarSeedingDeclarationSA from './components/Forms/AadhaarSeedingDeclarationSA';
 import MitcDeclarationSA from './components/Forms/MitcDeclarationSA';
 import CustomerMeetingLocationSA from './components/Forms/CustomerMeetingLocationSA';
+import ApplicationSubmittedSA from './components/Forms/ApplicationSubmittedSA';
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -82,7 +83,7 @@ function App() {
       }
 
       // Extract the form identifier (id, keyName, or formKey) from the schema itself
-      const actualFormKey = schema.form?.id || schema.form?.keyName || schema.formKey || taskKey;
+      const actualFormKey = schema.form?.id || schema.form?.keyName || schema.id || schema.keyName || schema.formKey || taskKey;
 
       console.log(`[loadTaskForm] Updating state for task: ${taskName} with actualFormKey: ${actualFormKey}`, schema);
       setFormSchema({ ...schema, taskName, formKey: actualFormKey });
@@ -135,6 +136,16 @@ function App() {
         ...formData
       };
 
+      if (currentTask.userTaskKey === 'mock_app_submit_task') {
+        console.warn('[handleFormSubmit] The backend did not provide a real task ID for app_submit_kotak. Bypassing API call and resolving locally.');
+        setMessage('Application Process Completed!');
+        setView('dashboard');
+        setFormSchema(null);
+        setCurrentTask({ userTaskKey: null, name: '' });
+        setLoading(false);
+        return;
+      }
+
       // Complete current task
       const completeResponse = await completeTask(token, currentTask.userTaskKey, updatedVariables);
       console.log('[handleFormSubmit] Complete Task Response:', completeResponse);
@@ -158,6 +169,12 @@ function App() {
 
         // Fetch schema and update view for next task
         await loadTaskForm(token, nextTask.userTaskKey, nextTask.name);
+      } else if (formSchema?.formKey === 'customer_meet_sa') {
+        console.log('[handleFormSubmit] API did not return next task synchronously. Manually routing to Application Submitted overlay...');
+        setProcessVariables(updatedVariables);
+        setFormSchema({ formKey: 'app_submit_kotak', taskName: 'Application Submitted' });
+        setCurrentTask({ userTaskKey: 'mock_app_submit_task', name: 'Application Submitted' });
+        setView('form');
       } else {
         console.log('[handleFormSubmit] No next task found in response. Returning to dashboard.');
 
@@ -348,6 +365,12 @@ function App() {
             />
           ) : formSchema?.formKey === 'customer_meet_sa' ? (
             <CustomerMeetingLocationSA
+              key={currentTask.userTaskKey}
+              processVariables={processVariables}
+              onFormSubmit={handleFormSubmit}
+            />
+          ) : formSchema?.formKey === 'app_submit_kotak' ? (
+            <ApplicationSubmittedSA
               key={currentTask.userTaskKey}
               processVariables={processVariables}
               onFormSubmit={handleFormSubmit}
