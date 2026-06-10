@@ -130,13 +130,15 @@ const ValidateSA = ({ onFormSubmit, processVariables }) => {
       <div className="validate-card">
         <header className="validate-header">
           <h2>Validate</h2>
-          <h3>Customer Details</h3>
-          <p>Please Enter Customer Details To start The Journey</p>
+          <div className="validate-subheader-left">
+            <h3>Customer Details</h3>
+            <p>Please Enter Customer Details To Start The Journey</p>
+          </div>
         </header>
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Aadhaar Linked Mobile Number</label>
+            <label>Aadhaar Linked Mobile Number<span className="required-asterisk">*</span></label>
             <input
               type="text"
               name="mobileNumberLinkedToAadhaar"
@@ -150,7 +152,7 @@ const ValidateSA = ({ onFormSubmit, processVariables }) => {
           </div>
 
           <div className="form-group">
-            <label>Email ID</label>
+            <label>Email ID<span className="required-asterisk">*</span></label>
             <input
               type="email"
               name="emailId"
@@ -163,7 +165,7 @@ const ValidateSA = ({ onFormSubmit, processVariables }) => {
           </div>
 
           <div className="form-group">
-            <label>PAN Number</label>
+            <label>PAN Number<span className="required-asterisk">*</span></label>
             <input
               type="text"
               name="panNumber"
@@ -177,7 +179,7 @@ const ValidateSA = ({ onFormSubmit, processVariables }) => {
           </div>
 
           <div className="form-group">
-            <label>Confirm PAN Number</label>
+            <label>Confirm PAN Number<span className="required-asterisk">*</span></label>
             <input
               type="text"
               name="cnfPanNumber"
@@ -191,7 +193,7 @@ const ValidateSA = ({ onFormSubmit, processVariables }) => {
           </div>
 
           <div className="form-group">
-            <label>Aadhaar Number</label>
+            <label>Aadhaar Number<span className="required-asterisk">*</span></label>
             <input
               type="text"
               name="aadhaarNumber"

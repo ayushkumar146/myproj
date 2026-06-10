@@ -160,5 +160,16 @@
 
 .validate-form-container.backdrop-blur-view {
   pointer-events: none;
-  opacity: 0.6;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 480px) {
+  .radio-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .verified-details-list {
+    gap: 16px;
+  }
 }

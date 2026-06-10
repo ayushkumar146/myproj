@@ -86,5 +86,25 @@
 }
 
 .nd-add-btn:hover {
-  background-color: rgba(0, 82, 155, 0.05);
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 480px) {
+  .nd-card {
+    padding: 20px 16px;
+  }
+  .nd-title {
+    font-size: 18px;
+  }
+  .nd-input, .nd-select {
+    height: 48px;
+  }
+  .nd-radio-group {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .nd-dob-container {
+    flex-direction: column;
+    gap: 16px;
+  }
 }

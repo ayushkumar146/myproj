@@ -57,18 +57,27 @@
   color: rgba(0, 0, 0, 1);
 }
 
-.validate-header h3 {
-  color: var(--text-main);
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-top: 1rem;
+.validate-subheader-left {
   text-align: left;
+  margin-top: 24px;
 }
 
-.validate-header p {
-  color: var(--text-muted);
-  font-size: 0.95rem;
-  text-align: left;
+.validate-subheader-left h3 {
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 100%;
+  color: rgba(0, 0, 0, 1);
+  margin-bottom: 8px;
+}
+
+.validate-subheader-left p {
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 100%;
+  color: rgba(153, 153, 153, 1);
+  margin: 0;
 }
 
 .form-group {
@@ -88,6 +97,11 @@
   display: block;
 }
 
+.required-asterisk {
+  color: rgba(255, 0, 0, 1);
+  margin-left: 2px;
+}
+
 .input-wrapper {
   position: relative;
   display: flex;
@@ -98,12 +112,14 @@
   height: var(--input-height);
   width: 100%;
   padding: 0 1rem;
-  border: 1.5px solid var(--border-color);
-  border-radius: 12px;
-  font-size: 1rem;
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-size: 16px;
   color: var(--text-main);
   transition: all 0.2s ease;
-  background: #F1F5F9;
+  background: var(--white);
+  box-sizing: border-box;
 }
 
 .form-group input:focus {
@@ -174,7 +190,7 @@
 /* Micro-animations for inputs */
 .form-group input:not(:placeholder-shown):not(:focus) {
   border-color: var(--border-color);
-  background: #F8FAFC;
+  background: var(--white);
 }
 
 .form-group input:not(:placeholder-shown):valid:not(.error) {

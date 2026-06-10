@@ -138,3 +138,27 @@
   text-transform: capitalize;
   color: rgba(0, 0, 0, 1);
 }
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 480px) {
+  .dec-card {
+    padding: 20px 16px;
+  }
+  .dec-heading {
+    font-size: 20px;
+  }
+  .dec-content-box {
+    padding: 16px 12px;
+  }
+  .dec-text, .dec-inline-label, .dec-note {
+    font-size: 13px;
+    line-height: 20px;
+  }
+  .dec-inputs-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .dec-input {
+    height: 48px;
+  }
+}

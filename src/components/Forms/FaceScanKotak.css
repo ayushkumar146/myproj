@@ -285,5 +285,18 @@
 }
 
 .face-scan-submit-btn:not(:disabled):hover {
-  background-color: #002244;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 480px) {
+  .face-scan-card {
+    padding: 24px 16px;
+  }
+  .face-scan-header h2 {
+    font-size: 20px;
+  }
+  .camera-viewfinder {
+    width: 160px;
+    height: 160px;
+  }
 }

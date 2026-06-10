@@ -143,3 +143,13 @@ body {
   font-size: 0.75rem;
   color: #999;
 }
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 480px) {
+  .login-card {
+    padding: 32px 24px;
+  }
+  .welcome-text {
+    font-size: 1.5rem;
+  }
+}

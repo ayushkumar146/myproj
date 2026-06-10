@@ -282,5 +282,18 @@
 }
 
 .proceed-btn:hover {
-    opacity: 0.9;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 480px) {
+  .document-slot {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px;
+  }
+  .slot-actions {
+    width: 100%;
+    justify-content: flex-start;
+    margin-top: 12px;
+  }
 }

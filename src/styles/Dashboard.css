@@ -251,3 +251,15 @@
 .back-btn:hover {
   text-decoration: underline;
 }
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  .dashboard-header-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}

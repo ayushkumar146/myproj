@@ -285,5 +285,18 @@
 }
 
 .fingerprint-scan-submit-btn:not(:disabled):hover {
-  background-color: #002244;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 480px) {
+  .fingerprint-scan-card {
+    padding: 24px 16px;
+  }
+  .fingerprint-scan-header h2 {
+    font-size: 20px;
+  }
+  .sensor-viewfinder {
+    width: 160px;
+    height: 160px;
+  }
 }
