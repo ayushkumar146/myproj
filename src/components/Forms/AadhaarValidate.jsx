@@ -44,8 +44,8 @@ const AadhaarValidate = ({ onFormSubmit, processVariables, readOnly }) => {
     <div className={`validate-form-container ${readOnly ? 'backdrop-blur-view' : ''}`}>
       <div className="validate-card">
         <header className="validate-header">
-          <h2>Validate</h2>
-          <h3>Aadhaar Validate Details</h3>
+          <h2>Aadhaar Validate Details</h2>
+          {/* <h3>Aadhaar Validate Details</h3> */}
         </header>
 
         <p className="consent-audio-title">Aadhaar Consent Audio</p>

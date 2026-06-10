@@ -1,10 +1,25 @@
 /* AadhaarValidate.css */
 @import url('./ValidateSA.css');
 
+.validate-header h2 {
+  font-family: 'Frutiger LT Std', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 100%;
+  letter-spacing: 0;
+  text-align: center;
+  color: rgba(0, 0, 0, 1);
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
 .consent-audio-title {
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: #000000;
+  font-family: 'Frutiger LT Std', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0;
+  color: rgba(0, 0, 0, 1);
   text-align: left;
   margin-top: 0;
   margin-bottom: 16px;
@@ -30,7 +45,7 @@
   justify-content: center;
   width: 18px;
   height: 18px;
-  background-color: var(--secondary-blue);
+  background-color: rgba(11, 77, 136, 1);
   color: var(--white);
   border-radius: 50%;
   flex-shrink: 0;
@@ -41,9 +56,13 @@
 }
 
 .verified-details-text {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--secondary-blue);
+  font-family: 'Frutiger LT Std', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0;
+  text-transform: capitalize;
+  color: rgba(11, 77, 136, 1);
 }
 
 /* Checkbox and Radio styling overrides */
@@ -59,10 +78,27 @@
   user-select: none;
 }
 
-.checkbox-text, .radio-text {
-  font-size: 0.925rem;
-  color: var(--text-main);
-  font-weight: 500;
+.checkbox-text {
+  font-family: 'Frutiger LT Std', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0;
+  color: rgba(0, 0, 0, 1);
+  position: relative;
+  top: 1.5px;
+}
+
+.radio-text {
+  font-family: 'Frutiger LT Std', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 140%;
+  letter-spacing: -0.01em;
+  text-transform: capitalize;
+  color: rgba(0, 0, 0, 1);
+  position: relative;
+  top: 1.5px;
 }
 
 /* Hide standard inputs completely */
@@ -99,15 +135,17 @@
 }
 
 .checkbox-custom-box.checked {
-  background-color: var(--secondary-blue);
-  border-color: var(--secondary-blue);
+  background-color: rgba(11, 77, 136, 1);
+  border-color: rgba(11, 77, 136, 1);
 }
 
 /* Custom Radio Design */
 .biometric-type-label {
-  font-family: 'Frutiger LT Std', 'Outfit', sans-serif;
+  font-family: 'Frutiger LT Std', sans-serif;
+  font-weight: 400;
   font-size: 14px;
-  font-weight: 600;
+  line-height: 100%;
+  letter-spacing: 0;
   color: var(--secondary-blue);
   margin-bottom: 8px;
   display: block;
