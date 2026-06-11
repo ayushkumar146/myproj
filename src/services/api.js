@@ -781,8 +781,8 @@ export const completeTask = async (accessToken, userTaskKey, variables = {}) => 
 
   const body = {
     processVariables: {
-      ...variables,
-      "go_next": true
+      "go_next": true, // Default to true, but allow variables to overwrite
+      ...variables
     }
   };
 

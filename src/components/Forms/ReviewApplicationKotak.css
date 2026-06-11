@@ -1,0 +1,116 @@
+.ra-html-container {
+    font-family: "Frutiger LT Std", Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.ra-html-container .container {
+    max-width: 500px;
+    margin: auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.ra-html-container .header {
+    font-family: "Frutiger LT Std", Arial, sans-serif;
+    font-weight: 700; /* Bold */
+    font-size: 22px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    text-align: center;
+    color: rgba(0, 0, 0, 1);
+    margin-bottom: 16px; /* Increased vertical space */
+}
+
+.ra-html-container .sub-text {
+    font-family: "Frutiger LT Std", Arial, sans-serif;
+    font-weight: 300; /* Light */
+    font-size: 16px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: rgba(0, 0, 0, 1);
+    text-align: left;
+    margin-top: 16px; /* Added more space from heading */
+    margin-bottom: 32px;
+}
+
+.ra-html-container .row {
+    display: flex;
+    padding: 12px 0;
+}
+
+.ra-html-container .label {
+    font-family: "Frutiger LT Std", Arial, sans-serif;
+    font-weight: 300; /* Light */
+    font-style: normal;
+    font-size: 14px;
+    line-height: 140%;
+    letter-spacing: -0.14px; /* -1% of 14px */
+    text-transform: capitalize;
+    color: rgba(153, 153, 153, 1);
+    flex: 0 0 50%;
+    text-align: left;
+    padding-right: 10px;
+    box-sizing: border-box;
+}
+
+.ra-html-container .value {
+    font-family: "Frutiger LT Std", Arial, sans-serif;
+    font-weight: 400; /* Roman */
+    font-style: normal;
+    font-size: 14px;
+    line-height: 140%;
+    letter-spacing: -0.14px; /* -1% of 14px */
+    text-transform: capitalize;
+    color: rgba(0, 0, 0, 1);
+    flex: 0 0 50%;
+    text-align: left;
+    box-sizing: border-box;
+}
+
+/* Custom Button Styles appended below */
+.ra-button-group {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.ra-btn-back {
+    width: 184px;
+    height: 54px;
+    padding-top: 10px;
+    padding-right: 24px;
+    padding-bottom: 10px;
+    padding-left: 24px;
+    border-radius: 4px;
+    border: 1px solid rgba(11, 77, 136, 1);
+    background: transparent;
+    color: rgba(11, 77, 136, 1);
+    font-family: "Frutiger LT Std", "Outfit", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.ra-btn-submit {
+    width: 184px;
+    height: 54px;
+    padding-top: 10px;
+    padding-right: 24px;
+    padding-bottom: 10px;
+    padding-left: 24px;
+    border-radius: 4px;
+    border: none;
+    background: rgba(0, 51, 102, 1);
+    color: #FFFFFF;
+    font-family: "Frutiger LT Std", "Outfit", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    box-sizing: border-box;
+}

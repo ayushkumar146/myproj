@@ -29,6 +29,8 @@ import AadhaarSeedingDeclarationSA from './components/Forms/AadhaarSeedingDeclar
 import MitcDeclarationSA from './components/Forms/MitcDeclarationSA';
 import CustomerMeetingLocationSA from './components/Forms/CustomerMeetingLocationSA';
 import ApplicationSubmittedSA from './components/Forms/ApplicationSubmittedSA';
+import ReviewApplicationKotak from './components/Forms/ReviewApplicationKotak';
+import BiometricAuthenticationSA from './components/Forms/BiometricAuthenticationSA';
 import BiometricTest from './components/BiometricTest';
 
 function App() {
@@ -384,6 +386,18 @@ function App() {
             />
           ) : formSchema?.formKey === 'app_submit_kotak' ? (
             <ApplicationSubmittedSA
+              key={currentTask.userTaskKey}
+              processVariables={processVariables}
+              onFormSubmit={handleFormSubmit}
+            />
+          ) : formSchema?.formKey === 'review_application_kotak' ? (
+            <ReviewApplicationKotak
+              key={currentTask.userTaskKey}
+              processVariables={processVariables}
+              onFormSubmit={handleFormSubmit}
+            />
+          ) : formSchema?.formKey === 'biometric_authentication_sa' ? (
+            <BiometricAuthenticationSA
               key={currentTask.userTaskKey}
               processVariables={processVariables}
               onFormSubmit={handleFormSubmit}
