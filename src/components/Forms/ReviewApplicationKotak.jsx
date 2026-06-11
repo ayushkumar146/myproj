@@ -87,22 +87,26 @@ const ReviewApplicationKotak = ({ onFormSubmit, processVariables }) => {
           <div className="row"><div className="label">Biometric Auth :</div><div className="value">{getProcessVar('review_application.biometricAuth')}</div></div>
 
           <div className="ra-button-group">
-            <button 
-              type="button" 
-              className="ra-btn-back" 
-              onClick={() => handleAction('back')}
-              disabled={isSubmitting}
-            >
-              Back
-            </button>
-            <button 
-              type="button" 
-              className="ra-btn-submit" 
-              onClick={() => handleAction('submit')}
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? 'Processing...' : 'Review'}
-            </button>
+            <div className="ra-btn-wrapper-left">
+              <button 
+                type="button" 
+                className="ra-btn-back" 
+                onClick={() => handleAction('back')}
+                disabled={isSubmitting}
+              >
+                Back
+              </button>
+            </div>
+            <div className="ra-btn-wrapper-right">
+              <button 
+                type="button" 
+                className="ra-btn-submit" 
+                onClick={() => handleAction('submit')}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Processing...' : 'Review'}
+              </button>
+            </div>
           </div>
       </div>
     </div>
