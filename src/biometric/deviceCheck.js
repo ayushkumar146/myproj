@@ -10,7 +10,14 @@ export const checkBiometricDevice = async (selectedDevice = "MANTRA", protocol =
         const port = `111${indexNum}`;
         const url = `${protocol}://127.0.0.1:${port}/`;
         
-        const pidOptions = '<PidOptions ver="1.0"><Opts fCount="1" fType="2" iCount="0" iType="0" pCount="0" format="0" pidVer="2.0" timeout="20000" env="P" posh="UNKNOWN"/><Demo></Demo><CustOpts><Param name="ValidationKey" value="" /></CustOpts></PidOptions>';
+        let pidOptions = "";
+        
+        if (selectedDevice === 'IDEMIA_L1_RDSERVICE' || selectedDevice === 'Morpho_RD_Service') {
+          pidOptions = "<PidOptions ver='1.0'><Opts env='S' fCount='1' fType='2' format='0' pType='0' pCount='0' pgCount='0' pTimeout='10000' pidVer='2.0' otp='' wadh=''></Opts><Demo></Demo><CustOpts></CustOpts><Bios></Bios></PidOptions>";
+        } else {
+          // Default payload for Mantra and others
+          pidOptions = '<PidOptions ver="1.0"><Opts fCount="1" fType="2" iCount="0" iType="0" pCount="0" format="0" pidVer="2.0" timeout="20000" env="P" posh="UNKNOWN"/><Demo></Demo><CustOpts><Param name="ValidationKey" value="" /></CustOpts></PidOptions>';
+        }
 
         try {
           // Using fetch instead of $.ajax
@@ -19,10 +26,7 @@ export const checkBiometricDevice = async (selectedDevice = "MANTRA", protocol =
             headers: {
               'Content-Type': 'text/xml; charset=utf-8'
             },
-            // Note: GET/HEAD methods can't have body, but RDSERVICE is a custom method
-            // and might need the body omitted in some implementations, 
-            // but the original code sent pidOptions in data.
-            // body: pidOptions 
+            body: pidOptions 
           });
 
           const data = await response.text();
@@ -37,15 +41,14 @@ export const checkBiometricDevice = async (selectedDevice = "MANTRA", protocol =
             portuse = port;
             resolve({ status: 'WRONG_DEVICE', port: portuse, message: 'Kindly Choose Connected Device' });
           } else if (convStr.includes('status="NOTREADY"')) {
-            // Device found but not ready, keep searching or reject depending on requirement.
-            // Original code kept checking:
+            // Device found but not ready
             if (index < 21) {
               recursiveCheckDevice(index + 1);
             } else {
               reject({ status: 'NOTREADY', message: 'Device not connected...' });
             }
           } else {
-            // Unrecognized response, keep checking next port
+            // Unrecognized response
             if (index < 21) {
               recursiveCheckDevice(index + 1);
             } else {
@@ -61,7 +64,7 @@ export const checkBiometricDevice = async (selectedDevice = "MANTRA", protocol =
             reject({ status: 'ERROR', message: 'Device not connected...' });
           }
         }
-      }, 300); // 300ms delay between port checks as in original
+      }, 300); // 300ms delay between port checks
     };
 
     // Start recursion at index 0 (Port 11100)

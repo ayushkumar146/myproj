@@ -1,6 +1,16 @@
 /* NomineeDetailsSA.css - inherits layout from PersonalDetailsSA */
 @import './PersonalDetailsSA.css';
 
+.pd-card .nd-subtitle {
+  font-family: "Frutiger LT Std", "Outfit", sans-serif !important;
+  font-weight: 300 !important;
+  font-style: normal !important;
+  font-size: 16px !important;
+  line-height: 100% !important;
+  letter-spacing: 0px !important;
+  text-align: center !important;
+}
+
 .nd-global-errors {
   background-color: rgba(239, 68, 68, 0.1);
   border: 1px solid #EF4444;

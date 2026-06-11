@@ -212,9 +212,9 @@ const NomineeDetailsSA = ({ onFormSubmit, processVariables }) => {
       <div className="pd-card">
         <header className="pd-header">
           <h2 className="pd-title">Nominee Details</h2>
-          <p className="pd-subtitle">Enter all the nominee details</p>
+          
         </header>
-
+         <p className="pd-subtitle nd-subtitle">Enter all the nominee details</p>
         {globalErrors.length > 0 && Object.keys(touchedFields).length > 0 && (
           <div className="nd-global-errors">
             {globalErrors.map((err, i) => (
@@ -224,7 +224,7 @@ const NomineeDetailsSA = ({ onFormSubmit, processVariables }) => {
         )}
 
         <form onSubmit={handleSubmit} className="pd-form" noValidate>
-          
+        
           {nominees.map((nominee, index) => {
             const nomErrs = errors[index] || {};
             
@@ -288,7 +288,7 @@ const NomineeDetailsSA = ({ onFormSubmit, processVariables }) => {
                     value={nominee.phNumber}
                     onChange={e => handleChange(index, 'phNumber', e.target.value)}
                     onBlur={() => touch(index, 'phNumber')}
-                    placeholder="Enter 10-digit mobile number"
+                    placeholder="Enter Mobile Number"
                     maxLength={10}
                     className={`pd-input ${isTouched(index, 'phNumber') && nomErrs.phNumber ? 'pd-input-error' : ''}`}
                   />
