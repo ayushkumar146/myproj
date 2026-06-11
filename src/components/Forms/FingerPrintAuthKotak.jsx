@@ -64,11 +64,59 @@ const FingerPrintAuthKotak = ({ onFormSubmit, processVariables }) => {
 
       setCaptureStatus('success');
       
+      // Parse the XML to a clean JSON object for Camunda
+      const parseXmlToJson = (xmlString) => {
+        try {
+          const parser = new DOMParser();
+          const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+          
+          const xmlToJson = (node) => {
+            let obj = {};
+            if (node.attributes && node.attributes.length > 0) {
+              for (let i = 0; i < node.attributes.length; i++) {
+                const attr = node.attributes[i];
+                obj[attr.nodeName] = attr.nodeValue;
+              }
+            }
+            if (node.children && node.children.length > 0) {
+              for (let i = 0; i < node.children.length; i++) {
+                const child = node.children[i];
+                const childName = child.nodeName;
+                const childObj = xmlToJson(child);
+                if (obj[childName] === undefined) {
+                  obj[childName] = childObj;
+                } else {
+                  if (!Array.isArray(obj[childName])) {
+                    obj[childName] = [obj[childName]];
+                  }
+                  obj[childName].push(childObj);
+                }
+              }
+            } else if (node.textContent && node.textContent.trim() !== '') {
+               if (Object.keys(obj).length > 0) {
+                   obj.text = node.textContent.trim();
+               } else {
+                   return node.textContent.trim();
+               }
+            }
+            return obj;
+          };
+          
+          const rootElement = xmlDoc.documentElement;
+          return { [rootElement.nodeName]: xmlToJson(rootElement) };
+        } catch (e) {
+          console.error("XML parse error:", e);
+          return xmlString; // Fallback to raw string
+        }
+      };
+
+      const captureDataJson = parseXmlToJson(xmlData);
+      
       setTimeout(() => {
         onFormSubmit({
           fingerPrintAuthKotak: {
             status: 'SUCCESS',
-            captureData: xmlData
+            captureData: captureDataJson
           },
           authfinger: 'SUCCESS'
         });
